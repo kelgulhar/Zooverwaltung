@@ -1,19 +1,21 @@
-package entities;
+package at.fhburgenland.entities;
 
 import jakarta.persistence.*;
 import java.util.List;
 
-@Entity
+@Entity(name="Besucher")
+@Table(name="besucher")
 public class Besucher {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="besucher_id", updatable = false, nullable = false)
     private int besucherId;
 
-    @Column(nullable = false)
+    @Column(name="vorname",nullable = false)
     private String vorname;
 
-    @Column(nullable = false)
+    @Column(name="nachname",nullable = false)
     private String nachname;
 
     @ManyToMany

@@ -1,4 +1,4 @@
-package entities;
+package at.fhburgenland.entities;
 
 import jakarta.persistence.*;
 import java.util.Date;

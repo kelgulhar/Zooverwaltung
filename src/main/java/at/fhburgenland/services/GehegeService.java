@@ -1,6 +1,6 @@
-package services;
+package at.fhburgenland.services;
 
-import entities.Gehege;
+import at.fhburgenland.entities.Gehege;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 

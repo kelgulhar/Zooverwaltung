@@ -1,4 +1,4 @@
-package entities;
+package at.fhburgenland.entities;
 
 import jakarta.persistence.*;
 import java.util.List;
@@ -18,6 +18,8 @@ public class Pfleger {
 
     @Column(length = 4, nullable = false)
     private String svnr;
+
+    @Column()
 
     @ManyToMany
     @JoinTable(name = "Pflegt",

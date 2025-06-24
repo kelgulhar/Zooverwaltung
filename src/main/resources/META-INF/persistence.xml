@@ -17,5 +17,4 @@
             <property name="jakarta.persistence.jdbc.password" value="fogl"/>
         </properties>
     </persistence-unit>
-
 </persistence>

@@ -1,7 +1,9 @@
-package entities;
+package at.fhburgenland.entities;
 
 import jakarta.persistence.*;
-import java.util.Date;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Entity
@@ -14,11 +16,11 @@ public class Fuehrung {
     @Column(nullable = false)
     private String gehegeroute;
 
-    @Temporal(TemporalType.DATE)
-    private Date datum;
+    @Column(nullable = false)
+    private LocalDate datum;
 
-    @Temporal(TemporalType.TIME)
-    private Date uhrzeit;
+    @Column(nullable = false)
+    private LocalTime uhrzeit;
 
     @ManyToMany(mappedBy = "fuehrungen")
     private List<Pfleger> veranstalter;

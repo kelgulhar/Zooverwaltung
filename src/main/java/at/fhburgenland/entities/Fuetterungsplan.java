@@ -1,21 +1,25 @@
-package entities;
+package at.fhburgenland.entities;
 
 import jakarta.persistence.*;
-import java.util.Date;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
-@Entity
+@Entity(name = "Fuetterungsplan")
+@Table(name = "fuetterungsplan")
 public class Fuetterungsplan {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="plan_id", updatable = false, nullable = false)
     private int planId;
 
-    @Temporal(TemporalType.TIME)
-    private Date uhrzeit;
+    @Column(nullable = false)
+    private LocalTime uhrzeit;
 
-    @Temporal(TemporalType.DATE)
-    private Date datum;
+    @Column(nullable = false)
+    private LocalDate datum;
 
     @ManyToMany(mappedBy = "fuetterungsplaene")
     private List<Pfleger> pflegerListe;

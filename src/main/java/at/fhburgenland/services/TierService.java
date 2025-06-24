@@ -1,21 +1,35 @@
-package services;
+package at.fhburgenland.services;
 
-import entities.Tier;
+import at.fhburgenland.entities.Tier;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Persistence;
+
 import java.util.List;
+
 
 public class TierService {
 
-    private EntityManager em;
+    private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("project");
 
-    public TierService(EntityManager em) {
-        this.em = em;
-    }
+    public static void create(Tier tier) {
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction et = null;
+        try {
+            et = em.getTransaction();
+            et.begin();
+            em.persist(tier);
+            et.commit();
 
-    public void create(Tier tier) {
-        em.getTransaction().begin();
-        em.persist(tier);
-        em.getTransaction().commit();
+        } catch (Exception e){
+            if (et != null){
+                et.rollback();
+                System.err.println(e.getMessage());
+            }
+        } finally {
+            em.close();
+        }
     }
 
     public Tier find(int id) {
