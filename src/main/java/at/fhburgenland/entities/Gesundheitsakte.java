@@ -22,4 +22,31 @@ public class Gesundheitsakte {
     private Tier tier;
 
     // Getter und Setter
+    public int getAkteId(){
+        return this.akteId;
+    }
+
+    public String getBehandlungsart() {
+        return behandlungsart;
+    }
+
+    public void setBehandlungsart(String behandlungsart) {
+        this.behandlungsart = behandlungsart;
+    }
+
+    public Date getBehandlungsdatum() {
+        return behandlungsdatum;
+    }
+
+    public void setBehandlungsdatum(Date behandlungsdatum) {
+        this.behandlungsdatum = behandlungsdatum;
+    }
+
+    public Tier getTier() {
+        return tier;
+    }
+
+    public void setTier(Tier tier) {
+        this.tier = tier;
+    }
 }

@@ -13,7 +13,7 @@ public class Gehege {
     @Column(nullable = false)
     private String gehegeart;
 
-    @OneToMany(mappedBy = "gehege", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "gehege", cascade = CascadeType.ALL) // TODO Cascade selbst implementieren
     private List<Tier> tiere;
 
     @ManyToMany(mappedBy = "gereinigteGehege")

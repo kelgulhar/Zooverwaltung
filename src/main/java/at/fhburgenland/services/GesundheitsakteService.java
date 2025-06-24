@@ -1,22 +1,22 @@
 package at.fhburgenland.services;
 
+import at.fhburgenland.entities.Gesundheitsakte;
 import at.fhburgenland.entities.Tier;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
-
-public class TierService {
-
+public class GesundheitsakteService {
     private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("project");
 
-    public static void create(Tier tier) {
+    public static void create(Gesundheitsakte gesAkte){
         EntityManager em = emf.createEntityManager();
         EntityTransaction et = null;
         try {
             et = em.getTransaction();
             et.begin();
-            em.persist(tier);
+            em.persist(gesAkte);
             et.commit();
 
         } catch (Exception e){
@@ -29,11 +29,11 @@ public class TierService {
         }
     }
 
-    public static Tier find(int id) {
+    public static Gesundheitsakte find(int id){
         EntityManager em = emf.createEntityManager();
 
         try{
-            return em.find(Tier.class, id);
+            return em.find(Gesundheitsakte.class, id);
         } catch(Exception e){
             e.printStackTrace();
             return null;
@@ -42,26 +42,23 @@ public class TierService {
         }
     }
 
-    public static void update(Tier tier) {
-        // AUFPASSEN auf min max Notation von Gehege
+    public static void update(Gesundheitsakte gAkte){
+        // AUFPASSEN auf min max Notation von TIer
         EntityManager em = emf.createEntityManager();
         EntityTransaction et = null;
-        Tier t = null;
+        Gesundheitsakte g = null;
 
         try{
             et = em.getTransaction();
             et.begin();
 
-            t = em.find(Tier.class, tier.getTierId());
-            t.setTierart(tier.getTierart());
-            t.setName(tier.getName());
-            t.setAlter(tier.getAlter());
-            t.setGehege(tier.getGehege());
+            g = em.find(Gesundheitsakte.class, gAkte.getAkteId());
+            g.setBehandlungsart(gAkte.getBehandlungsart());
+            g.setTier(gAkte.getTier());
 
-            // TODO Gehegeservice.find(t.gehegeId) != null ? continue : abort
-            // TODO Gehegeservice.find(tier.gehegeId) <= 10 ? continue : abort
+            // TODO selbes Drama mit min max wie bei delete
 
-            em.persist(t);
+            em.persist(g);
             et.commit();
         } catch (Exception e){
             if(et != null){
@@ -73,27 +70,30 @@ public class TierService {
         }
     }
 
-    public static void delete(int id) {
-        // AUFPASSEN auf Gesundheitsakte und Gehege
+    public static void delete(int id){
+        // AUFPASSEN min-max Notation 1 Tier muss min 1 Akte haben?
 
         EntityManager em = emf.createEntityManager();
         EntityTransaction et = null;
-        Tier t = null;
-        // List Gesundheitsakten???
+        Gesundheitsakte g = null;
 
         try{
             et = em.getTransaction();
             et.begin();
 
-            t = em.find(Tier.class, id);
+            g = em.find(Gesundheitsakte.class, id);
 
-            // TODO Gehegeservice.find(t.gehegeId) != null ? continue : abort
-            // oder mit Gehegeservice.delete(t.gehegeId)
+            // TODO Gesundheitsakte muss min einmal für Tier existieren
+            /*
+            List<Gesundheitsakte> gAkten = findALl();
+            if (gAkten.size() < 2)
+                abort???
 
-            // TODO Gesundheitsakteservice.findAllByTierId(tierId)
-            // TODO foreach Gesundheitsservice.delete(id)
+                wenn 1 oder weniger wäre dann würde durch löschen nichts mehr da sein
+            */
 
-            em.remove(t);
+
+            em.remove(g);
             et.commit();
         } catch (Exception e){
             if(et != null){
@@ -105,10 +105,10 @@ public class TierService {
         }
     }
 
-    public static List<Tier> findAll() {
+    public static List<Gesundheitsakte> findALl(){
         EntityManager em = emf.createEntityManager();
-        String query = "SELECT t FROM Tier t";
-        TypedQuery<Tier> tq = em.createQuery(query, Tier.class);
+        String query = "SELECT g FROM Gesundheitsakte g";
+        TypedQuery<Gesundheitsakte> tq = em.createQuery(query, Gesundheitsakte.class);
 
         try{
             return tq.getResultList();
