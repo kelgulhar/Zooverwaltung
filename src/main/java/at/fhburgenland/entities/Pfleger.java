@@ -52,4 +52,72 @@ public class Pfleger {
     private List<Fuehrung> fuehrungen;
 
     // Getter und Setter
+
+    public int getPflegerId() {
+        return pflegerId;
+    }
+
+    public String getVorname() {
+        return vorname;
+    }
+
+    public void setVorname(String vorname) {
+        this.vorname = vorname;
+    }
+
+    public String getNachname() {
+        return nachname;
+    }
+
+    public void setNachname(String nachname) {
+        this.nachname = nachname;
+    }
+
+    public String getSvnr() {
+        return svnr;
+    }
+
+    public void setSvnr(String svnr) {
+        this.svnr = svnr;
+    }
+
+    public List<Tier> getGepflegteTiere() {
+        return gepflegteTiere;
+    }
+
+    public void setGepflegteTiere(List<Tier> gepflegteTiere) {
+        this.gepflegteTiere = gepflegteTiere;
+    }
+
+    public List<Gehege> getGereinigteGehege() {
+        return gereinigteGehege;
+    }
+
+    public void setGereinigteGehege(List<Gehege> gereinigteGehege) {
+        this.gereinigteGehege = gereinigteGehege;
+    }
+
+    public List<Inventar> getInventarListe() {
+        return inventarListe;
+    }
+
+    public void setInventarListe(List<Inventar> inventarListe) {
+        this.inventarListe = inventarListe;
+    }
+
+    public List<Fuetterungsplan> getFuetterungsplaene() {
+        return fuetterungsplaene;
+    }
+
+    public void setFuetterungsplaene(List<Fuetterungsplan> fuetterungsplaene) {
+        this.fuetterungsplaene = fuetterungsplaene;
+    }
+
+    public List<Fuehrung> getFuehrungen() {
+        return fuehrungen;
+    }
+
+    public void setFuehrungen(List<Fuehrung> fuehrungen) {
+        this.fuehrungen = fuehrungen;
+    }
 }

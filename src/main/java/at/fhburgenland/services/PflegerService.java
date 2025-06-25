@@ -1,23 +1,23 @@
 package at.fhburgenland.services;
 
-import at.fhburgenland.entities.Gehege;
+import at.fhburgenland.entities.Pfleger;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GehegeService {
+public class PflegerService {
     private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("project");
 
     public static void run(){
-        // TODO Menu und Logik für Gehege
+        // TODO Menu und Logik für Pfleger
     }
 
-    public static void create(Gehege gehege){
+    public static void create(Pfleger p){
         EntityManager em = emf.createEntityManager();
         EntityTransaction et = null;
         try {
             et = em.getTransaction(); et.begin();
-            em.persist(gehege);
+            em.persist(p);
             et.commit();
         } catch (Exception e){
             if (et != null) et.rollback();
@@ -27,10 +27,10 @@ public class GehegeService {
         }
     }
 
-    public static Gehege find(int id){
+    public static Pfleger find(int id){
         EntityManager em = emf.createEntityManager();
         try{
-            return em.find(Gehege.class, id);
+            return em.find(Pfleger.class, id);
         } catch(Exception e){
             e.printStackTrace();
             return null;
@@ -39,16 +39,16 @@ public class GehegeService {
         }
     }
 
-    public static void update(Gehege g){
+    public static void update(Pfleger p){
         EntityManager em = emf.createEntityManager();
         EntityTransaction et = null;
         try{
             et = em.getTransaction(); et.begin();
-            Gehege existing = em.find(Gehege.class, g.getGehegeId());
-            existing.setGehegeart(g.getGehegeart());
-
-            // TODO: Min/Max-Notation prüfen (max. 10 Tiere später)
-
+            Pfleger existing = em.find(Pfleger.class, p.getPflegerId());
+            existing.setVorname(p.getVorname());
+            existing.setNachname(p.getNachname());
+            existing.setSvnr(p.getSvnr());
+            // TODO: Min/Max-Notation prüfen (0..10 Tiere, 0..5 Gehege/Führungen/Fütterungen/Inventar)
             em.persist(existing);
             et.commit();
         } catch (Exception e){
@@ -64,11 +64,9 @@ public class GehegeService {
         EntityTransaction et = null;
         try{
             et = em.getTransaction(); et.begin();
-            Gehege g = em.find(Gehege.class, id);
-
-            // TODO: Prüfen, ob bei Löschung keine Tiere orphaned werden
-
-            em.remove(g);
+            Pfleger p = em.find(Pfleger.class, id);
+            // TODO: Prüfen, ob nach Löschen alle Min-Anforderungen der Tiere/Führungen/Inventar Functions erfüllt sind
+            em.remove(p);
             et.commit();
         } catch (Exception e){
             if(et != null) et.rollback();
@@ -78,10 +76,10 @@ public class GehegeService {
         }
     }
 
-    public static List<Gehege> findAll(){
+    public static List<Pfleger> findAll(){
         EntityManager em = emf.createEntityManager();
-        String q = "SELECT g FROM Gehege g";
-        TypedQuery<Gehege> tq = em.createQuery(q, Gehege.class);
+        String q = "SELECT p FROM Pfleger p";
+        TypedQuery<Pfleger> tq = em.createQuery(q, Pfleger.class);
         try{
             return tq.getResultList();
         } catch(Exception e){

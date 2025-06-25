@@ -1,7 +1,6 @@
 package at.fhburgenland.services;
 
 import at.fhburgenland.entities.Gesundheitsakte;
-import at.fhburgenland.entities.Tier;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -9,6 +8,10 @@ import java.util.List;
 
 public class GesundheitsakteService {
     private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("project");
+
+    public static void run(){
+        // TODO Menu und Logik für Gesundheitsakte
+    }
 
     public static void create(Gesundheitsakte gesAkte){
         EntityManager em = emf.createEntityManager();
@@ -54,6 +57,7 @@ public class GesundheitsakteService {
 
             g = em.find(Gesundheitsakte.class, gAkte.getAkteId());
             g.setBehandlungsart(gAkte.getBehandlungsart());
+            g.setBehandlungsdatum(gAkte.getBehandlungsdatum());
             g.setTier(gAkte.getTier());
 
             // TODO selbes Drama mit min max wie bei delete
@@ -114,7 +118,7 @@ public class GesundheitsakteService {
             return tq.getResultList();
         } catch(Exception e){
             e.printStackTrace();
-            return null;
+            return new ArrayList<Gesundheitsakte>();
         }finally{
             em.close();
         }

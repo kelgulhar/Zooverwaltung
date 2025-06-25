@@ -3,12 +3,17 @@ package at.fhburgenland.services;
 import at.fhburgenland.entities.Tier;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class TierService {
 
     private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("project");
+
+    public static void run(){
+        // TODO Menu und Logik für Tier
+    }
 
     public static void create(Tier tier) {
         EntityManager em = emf.createEntityManager();
@@ -114,7 +119,7 @@ public class TierService {
             return tq.getResultList();
         } catch(Exception e){
             e.printStackTrace();
-            return null;
+            return new ArrayList<Tier>();
         }finally{
             em.close();
         }

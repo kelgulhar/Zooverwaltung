@@ -1,23 +1,23 @@
 package at.fhburgenland.services;
 
-import at.fhburgenland.entities.Gehege;
+import at.fhburgenland.entities.Inventar;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GehegeService {
+public class InventarService {
     private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("project");
 
     public static void run(){
-        // TODO Menu und Logik für Gehege
+        // TODO Menu und Logik für Inventar
     }
 
-    public static void create(Gehege gehege){
+    public static void create(Inventar inv){
         EntityManager em = emf.createEntityManager();
         EntityTransaction et = null;
         try {
             et = em.getTransaction(); et.begin();
-            em.persist(gehege);
+            em.persist(inv);
             et.commit();
         } catch (Exception e){
             if (et != null) et.rollback();
@@ -27,10 +27,10 @@ public class GehegeService {
         }
     }
 
-    public static Gehege find(int id){
+    public static Inventar find(int id){
         EntityManager em = emf.createEntityManager();
         try{
-            return em.find(Gehege.class, id);
+            return em.find(Inventar.class, id);
         } catch(Exception e){
             e.printStackTrace();
             return null;
@@ -39,16 +39,13 @@ public class GehegeService {
         }
     }
 
-    public static void update(Gehege g){
+    public static void update(Inventar i){
         EntityManager em = emf.createEntityManager();
         EntityTransaction et = null;
         try{
             et = em.getTransaction(); et.begin();
-            Gehege existing = em.find(Gehege.class, g.getGehegeId());
-            existing.setGehegeart(g.getGehegeart());
-
-            // TODO: Min/Max-Notation prüfen (max. 10 Tiere später)
-
+            Inventar existing = em.find(Inventar.class, i.getInventarId());
+            existing.setBezeichnung(i.getBezeichnung());
             em.persist(existing);
             et.commit();
         } catch (Exception e){
@@ -64,11 +61,8 @@ public class GehegeService {
         EntityTransaction et = null;
         try{
             et = em.getTransaction(); et.begin();
-            Gehege g = em.find(Gehege.class, id);
-
-            // TODO: Prüfen, ob bei Löschung keine Tiere orphaned werden
-
-            em.remove(g);
+            Inventar i = em.find(Inventar.class, id);
+            em.remove(i);
             et.commit();
         } catch (Exception e){
             if(et != null) et.rollback();
@@ -78,10 +72,10 @@ public class GehegeService {
         }
     }
 
-    public static List<Gehege> findAll(){
+    public static List<Inventar> findAll(){
         EntityManager em = emf.createEntityManager();
-        String q = "SELECT g FROM Gehege g";
-        TypedQuery<Gehege> tq = em.createQuery(q, Gehege.class);
+        String q = "SELECT i FROM Inventar i";
+        TypedQuery<Inventar> tq = em.createQuery(q, Inventar.class);
         try{
             return tq.getResultList();
         } catch(Exception e){

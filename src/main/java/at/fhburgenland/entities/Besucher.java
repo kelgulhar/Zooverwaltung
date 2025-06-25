@@ -25,4 +25,32 @@ public class Besucher {
     private List<Fuehrung> besuchteFuehrungen;
 
     // Getter und Setter
+
+    public String getVorname() {
+        return vorname;
+    }
+
+    public void setVorname(String vorname) {
+        this.vorname = vorname;
+    }
+
+    public int getBesucherId() {
+        return besucherId;
+    }
+
+    public String getNachname() {
+        return nachname;
+    }
+
+    public void setNachname(String nachname) {
+        this.nachname = nachname;
+    }
+
+    public List<Fuehrung> getBesuchteFuehrungen() {
+        return besuchteFuehrungen;
+    }
+
+    public void setBesuchteFuehrungen(List<Fuehrung> besuchteFuehrungen) {
+        this.besuchteFuehrungen = besuchteFuehrungen;
+    }
 }

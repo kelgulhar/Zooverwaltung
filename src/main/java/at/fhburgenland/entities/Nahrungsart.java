@@ -16,5 +16,26 @@ public class Nahrungsart {
     @ManyToMany(mappedBy = "nahrungsarten")
     private List<Fuetterungsplan> fuetterungsplaene;
 
+
     // Getter und Setter
+
+    public int getNahrungId(){
+        return this.nahrungId;
+    }
+
+    public String getBezeichnung() {
+        return bezeichnung;
+    }
+
+    public void setBezeichnung(String bezeichnung) {
+        this.bezeichnung = bezeichnung;
+    }
+
+    public List<Fuetterungsplan> getFuetterungsplaene() {
+        return fuetterungsplaene;
+    }
+
+    public void setFuetterungsplaene(List<Fuetterungsplan> fuetterungsplaene) {
+        this.fuetterungsplaene = fuetterungsplaene;
+    }
 }
