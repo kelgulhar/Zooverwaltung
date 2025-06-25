@@ -1,6 +1,9 @@
 package at.fhburgenland.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
+
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -20,17 +23,20 @@ public class Pfleger {
     private String svnr;
 
     @Column()
+    private LocalDate gebDat;
 
     @ManyToMany
     @JoinTable(name = "Pflegt",
         joinColumns = @JoinColumn(name = "pfleger_id"),
         inverseJoinColumns = @JoinColumn(name = "tier_id"))
+    @Size(max=10, message = "Ein Pfleger kann maximal 10 Tiere pflegen")
     private List<Tier> gepflegteTiere;
 
     @ManyToMany
     @JoinTable(name = "Reinigt",
         joinColumns = @JoinColumn(name = "pfleger_id"),
         inverseJoinColumns = @JoinColumn(name = "gehege_id"))
+    @Size(max=5, message = "Ein Pfleger kann maximal 5 Gehege reinigen")
     private List<Gehege> gereinigteGehege;
 
     @ManyToMany
@@ -43,12 +49,14 @@ public class Pfleger {
     @JoinTable(name = "Fuehrt_durch",
         joinColumns = @JoinColumn(name = "pfleger_id"),
         inverseJoinColumns = @JoinColumn(name = "plan_id"))
+    @Size(max=5, message = "Ein Pfleger kann maximal 5 Fütterungen durchführen")
     private List<Fuetterungsplan> fuetterungsplaene;
 
     @ManyToMany
     @JoinTable(name = "Veranstaltet",
         joinColumns = @JoinColumn(name = "pfleger_id"),
         inverseJoinColumns = @JoinColumn(name = "fuehrung_id"))
+    @Size(max=5, message = "Ein Pfleger kann maximal 5 Führungen veranstalten")
     private List<Fuehrung> fuehrungen;
 
     // Getter und Setter
@@ -79,6 +87,14 @@ public class Pfleger {
 
     public void setSvnr(String svnr) {
         this.svnr = svnr;
+    }
+
+    public LocalDate getGebDat() {
+        return gebDat;
+    }
+
+    public void setGebDat(LocalDate gebDat) {
+        this.gebDat = gebDat;
     }
 
     public List<Tier> getGepflegteTiere() {

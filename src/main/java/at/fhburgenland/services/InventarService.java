@@ -2,6 +2,8 @@ package at.fhburgenland.services;
 
 import at.fhburgenland.entities.Inventar;
 import jakarta.persistence.*;
+import jakarta.validation.ConstraintViolationException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +50,13 @@ public class InventarService {
             existing.setBezeichnung(i.getBezeichnung());
             em.persist(existing);
             et.commit();
-        } catch (Exception e){
+        } catch (ConstraintViolationException cve){
+            if(et.isActive()){
+                et.rollback();
+            }
+            System.err.println(cve.getMessage());
+        }
+        catch (Exception e){
             if(et != null) et.rollback();
             System.err.println(e.getMessage());
         } finally{

@@ -2,6 +2,8 @@ package at.fhburgenland.services;
 
 import at.fhburgenland.entities.Gehege;
 import jakarta.persistence.*;
+import jakarta.validation.ConstraintViolationException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,9 +48,6 @@ public class GehegeService {
             et = em.getTransaction(); et.begin();
             Gehege existing = em.find(Gehege.class, g.getGehegeId());
             existing.setGehegeart(g.getGehegeart());
-
-            // TODO: Min/Max-Notation prüfen (max. 10 Tiere später)
-
             em.persist(existing);
             et.commit();
         } catch (Exception e){
@@ -65,12 +64,15 @@ public class GehegeService {
         try{
             et = em.getTransaction(); et.begin();
             Gehege g = em.find(Gehege.class, id);
-
-            // TODO: Prüfen, ob bei Löschung keine Tiere orphaned werden
-
             em.remove(g);
             et.commit();
-        } catch (Exception e){
+        } catch (ConstraintViolationException cve){
+            if(et.isActive()){
+                et.rollback();
+            }
+            System.err.println(cve.getMessage());
+        }
+        catch (Exception e){
             if(et != null) et.rollback();
             System.err.println(e.getMessage());
         } finally{

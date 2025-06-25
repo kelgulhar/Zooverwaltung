@@ -2,6 +2,8 @@ package at.fhburgenland.services;
 
 import at.fhburgenland.entities.Fuetterungsplan;
 import jakarta.persistence.*;
+import jakarta.validation.ConstraintViolationException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,12 +49,15 @@ public class FuetterungsplanService {
             Fuetterungsplan existing = em.find(Fuetterungsplan.class, f.getPlanId());
             existing.setDatum(f.getDatum());
             existing.setUhrzeit(f.getUhrzeit());
-
-            // TODO: Min/Max-Notation prüfen (1..* Nahrungsarten spater)
-
             em.persist(existing);
             et.commit();
-        } catch (Exception e){
+        } catch (ConstraintViolationException cve){
+            if(et.isActive()){
+                et.rollback();
+            }
+            System.err.println(cve.getMessage());
+        }
+        catch (Exception e){
             if(et != null) et.rollback();
             System.err.println(e.getMessage());
         } finally{
@@ -66,9 +71,6 @@ public class FuetterungsplanService {
         try{
             et = em.getTransaction(); et.begin();
             Fuetterungsplan f = em.find(Fuetterungsplan.class, id);
-
-            // TODO: prüfen, dass nach Löschung keine pläne fehlen wenn min >0
-
             em.remove(f);
             et.commit();
         } catch (Exception e){

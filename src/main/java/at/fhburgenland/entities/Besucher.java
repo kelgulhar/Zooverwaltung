@@ -1,6 +1,8 @@
 package at.fhburgenland.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
+
 import java.util.List;
 
 @Entity(name="Besucher")
@@ -22,6 +24,7 @@ public class Besucher {
     @JoinTable(name = "Besucht",
         joinColumns = @JoinColumn(name = "besucher_id"),
         inverseJoinColumns = @JoinColumn(name = "fuehrung_id"))
+    @Size(max=3, message="Ein Besucher kann maximal 3 Führungen besuchen")
     private List<Fuehrung> besuchteFuehrungen;
 
     // Getter und Setter

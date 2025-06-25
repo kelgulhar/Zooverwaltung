@@ -1,6 +1,7 @@
 package at.fhburgenland.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -23,9 +24,11 @@ public class Fuehrung {
     private LocalTime uhrzeit;
 
     @ManyToMany(mappedBy = "fuehrungen")
+    @Size(max=1, message = "Eine Führung kann nur von einem Pfleger veranstaltet werden")
     private List<Pfleger> veranstalter;
 
     @ManyToMany(mappedBy = "besuchteFuehrungen")
+    @Size(min=1, max=20, message = "Eine FÜhrung muss von mindestens 1 und maximal 20 Besuchern besucht werden")
     private List<Besucher> besucherListe;
 
     // Getter und Setter

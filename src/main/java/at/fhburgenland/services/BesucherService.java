@@ -2,6 +2,8 @@ package at.fhburgenland.services;
 
 import at.fhburgenland.entities.Besucher;
 import jakarta.persistence.*;
+import jakarta.validation.ConstraintViolationException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,10 +49,15 @@ public class BesucherService {
             Besucher existing = em.find(Besucher.class, b.getBesucherId());
             existing.setVorname(b.getVorname());
             existing.setNachname(b.getNachname());
-            // TODO: Min/Max-Notation prüfen (1..3 Führungen pro Besucher)
             em.persist(existing);
             et.commit();
-        } catch (Exception e){
+        } catch(ConstraintViolationException cve){
+            if(et.isActive()){
+                et.rollback();
+            }
+            System.err.println(cve.getMessage());
+        }
+        catch (Exception e){
             if(et != null) et.rollback();
             System.err.println(e.getMessage());
         } finally{
@@ -64,11 +71,17 @@ public class BesucherService {
         try{
             et = em.getTransaction(); et.begin();
             Besucher b = em.find(Besucher.class, id);
-            // TODO: Prüfen, ob nach Löschung keine  Mindestbesuche verletzt werden
             em.remove(b);
             et.commit();
-        } catch (Exception e){
-            if(et != null) et.rollback();
+        } catch (ConstraintViolationException cve){
+            if(et.isActive()){
+                et.rollback();
+            }
+            System.err.println(cve.getMessage());
+        } catch (Exception e) {
+            if(et != null) {
+                et.rollback();
+            }
             System.err.println(e.getMessage());
         } finally{
             em.close();

@@ -498,26 +498,28 @@ INSERT INTO Reinigt (Gehege_ID, Pfleger_ID) VALUES (5, 2);
 INSERT INTO Reinigt (Gehege_ID, Pfleger_ID) VALUES (5, 16);
 
 -- WELCHER PFLEGER VERWALTET WELCHE INVENTARITEMS
-INSERT INTO Verwaltet (Pfleger_ID, Inventar_ID) VALUES (1, 20);
-INSERT INTO Verwaltet (Pfleger_ID, Inventar_ID) VALUES (2, 2);
-INSERT INTO Verwaltet (Pfleger_ID, Inventar_ID) VALUES (3, 16);
-INSERT INTO Verwaltet (Pfleger_ID, Inventar_ID) VALUES (4, 5);
-INSERT INTO Verwaltet (Pfleger_ID, Inventar_ID) VALUES (5, 9);
-INSERT INTO Verwaltet (Pfleger_ID, Inventar_ID) VALUES (6, 11);
-INSERT INTO Verwaltet (Pfleger_ID, Inventar_ID) VALUES (7, 3);
-INSERT INTO Verwaltet (Pfleger_ID, Inventar_ID) VALUES (8, 6);
-INSERT INTO Verwaltet (Pfleger_ID, Inventar_ID) VALUES (9, 19);
-INSERT INTO Verwaltet (Pfleger_ID, Inventar_ID) VALUES (10, 17);
-INSERT INTO Verwaltet (Pfleger_ID, Inventar_ID) VALUES (11, 1);
-INSERT INTO Verwaltet (Pfleger_ID, Inventar_ID) VALUES (12, 18);
-INSERT INTO Verwaltet (Pfleger_ID, Inventar_ID) VALUES (13, 4);
-INSERT INTO Verwaltet (Pfleger_ID, Inventar_ID) VALUES (14, 13);
-INSERT INTO Verwaltet (Pfleger_ID, Inventar_ID) VALUES (15, 14);
-INSERT INTO Verwaltet (Pfleger_ID, Inventar_ID) VALUES (16, 10);
-INSERT INTO Verwaltet (Pfleger_ID, Inventar_ID) VALUES (17, 12);
-INSERT INTO Verwaltet (Pfleger_ID, Inventar_ID) VALUES (18, 15);
-INSERT INTO Verwaltet (Pfleger_ID, Inventar_ID) VALUES (19, 7);
-INSERT INTO Verwaltet (Pfleger_ID, Inventar_ID) VALUES (20, 8);
+INSERT INTO Verwaltet (Pfleger_ID, Inventar_ID) VALUES
+  (1, 1), (2, 1),
+  (3, 2),
+  (4, 3), (5, 3), (6, 3),
+  (3, 4), (7, 4),
+  (8, 5),
+  (2, 6), (4, 6),
+  (9, 7), (10, 7), (1, 7),
+  (11, 8),
+  (12, 9),
+  (14, 10), (15, 10),
+  (16, 11),
+  (17, 12), (18, 12),
+  (18, 13),
+  (1, 14),
+  (5, 15), (6, 15),
+  (7, 16), (8, 16), (9, 16),
+  (10, 17),
+  (11, 18), (12, 18), (13, 18),
+  (14, 19),
+  (15, 20), (16, 20), (17, 20);
+
 
 -- WELCHER PFLEGER FUEHRT WELCHE FUETTERUNGSPLAN DURCH
 INSERT INTO Fuehrt_durch (Plan_ID, Pfleger_ID) VALUES (1, 11);

@@ -2,6 +2,8 @@ package at.fhburgenland.services;
 
 import at.fhburgenland.entities.Pfleger;
 import jakarta.persistence.*;
+import jakarta.validation.ConstraintViolationException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,10 +50,16 @@ public class PflegerService {
             existing.setVorname(p.getVorname());
             existing.setNachname(p.getNachname());
             existing.setSvnr(p.getSvnr());
-            // TODO: Min/Max-Notation prüfen (0..10 Tiere, 0..5 Gehege/Führungen/Fütterungen/Inventar)
+            existing.setGebDat(p.getGebDat());
             em.persist(existing);
             et.commit();
-        } catch (Exception e){
+        } catch (ConstraintViolationException cve){
+            if(et.isActive()){
+                et.rollback();
+            }
+            System.err.println(cve.getMessage());
+        }
+        catch (Exception e){
             if(et != null) et.rollback();
             System.err.println(e.getMessage());
         } finally{
@@ -65,10 +73,15 @@ public class PflegerService {
         try{
             et = em.getTransaction(); et.begin();
             Pfleger p = em.find(Pfleger.class, id);
-            // TODO: Prüfen, ob nach Löschen alle Min-Anforderungen der Tiere/Führungen/Inventar Functions erfüllt sind
             em.remove(p);
             et.commit();
-        } catch (Exception e){
+        } catch (ConstraintViolationException cve) {
+            if(et.isActive()){
+                et.rollback();
+            }
+            System.err.println(cve.getMessage());
+        }
+        catch (Exception e){
             if(et != null) et.rollback();
             System.err.println(e.getMessage());
         } finally{

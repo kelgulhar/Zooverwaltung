@@ -2,6 +2,8 @@ package at.fhburgenland.services;
 
 import at.fhburgenland.entities.Nahrungsart;
 import jakarta.persistence.*;
+import jakarta.validation.ConstraintViolationException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +50,13 @@ public class NahrungsartService {
             existing.setBezeichnung(n.getBezeichnung());
             em.persist(existing);
             et.commit();
-        } catch (Exception e){
+        } catch (ConstraintViolationException cve){
+            if(et.isActive()){
+                et.rollback();
+            }
+            System.err.println(cve.getMessage());
+        }
+        catch (Exception e){
             if(et != null) et.rollback();
             System.err.println(e.getMessage());
         } finally{
@@ -64,7 +72,13 @@ public class NahrungsartService {
             Nahrungsart n = em.find(Nahrungsart.class, id);
             em.remove(n);
             et.commit();
-        } catch (Exception e){
+        } catch (ConstraintViolationException cve){
+            if(et.isActive()){
+                et.rollback();
+            }
+            System.err.println(cve.getMessage());
+        }
+        catch (Exception e){
             if(et != null) et.rollback();
             System.err.println(e.getMessage());
         } finally{

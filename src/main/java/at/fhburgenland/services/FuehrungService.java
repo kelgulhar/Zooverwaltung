@@ -2,6 +2,8 @@ package at.fhburgenland.services;
 
 import at.fhburgenland.entities.Fuehrung;
 import jakarta.persistence.*;
+import jakarta.validation.ConstraintViolationException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,12 +50,15 @@ public class FuehrungService {
             existing.setDatum(f.getDatum());
             existing.setUhrzeit(f.getUhrzeit());
             existing.setGehegeroute(f.getGehegeroute());
-
-            // TODO: Min/Max-Notation prüfen (1 Pfleger ? 1..5 Führungen, max 20 Besucher)
-
             em.persist(existing);
             et.commit();
-        } catch (Exception e){
+        } catch(ConstraintViolationException cve){
+            if(et.isActive()){
+                et.rollback();
+            }
+            System.err.println(cve.getMessage());
+        }
+        catch (Exception e){
             if(et != null) et.rollback();
             System.err.println(e.getMessage());
         } finally{
