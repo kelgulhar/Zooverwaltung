@@ -15,8 +15,10 @@ public class Gehege {
     @Column(nullable = false)
     private String gehegeart;
 
-    @OneToMany(mappedBy = "gehege", cascade = CascadeType.ALL) // TODO Cascade selbst implementieren
-    @Size(min=1, max=10, message = "Ein Gehege beherbergt mindestens 1 und maximal 10 Tiere")
+    // Gehege konnte gar nicht gelöscht werden
+    // Deshalb veränderung der min max notation ein Gehege kann existieren ohne ein Tier zu beinhalten
+    @OneToMany(mappedBy = "gehege")
+    @Size(max=10, message = "Ein Gehege beherbergt mindestens 1 und maximal 10 Tiere")
     private List<Tier> tiere;
 
     @ManyToMany(mappedBy = "gereinigteGehege")
@@ -52,4 +54,41 @@ public class Gehege {
     public void setPflegerReinigung(List<Pfleger> pflegerReinigung) {
         this.pflegerReinigung = pflegerReinigung;
     }
+
+    // Helper
+    @PreRemove
+    private void preventRemoveIfTiereExist() {
+        if (!tiere.isEmpty()) {
+            throw new IllegalStateException(
+                    "Kann Gehege nicht löschen: " + tiere.size() + " Tier(e) sind noch zugeordnet."
+            );
+        }
+    }
+
+    public void addTier(Tier t) {
+        if (!tiere.contains(t)) {
+            tiere.add(t);
+            t.setGehege(this);
+        }
+    }
+
+    public void removeTier(Tier t) {
+        if (tiere.remove(t)) {
+            t.setGehege(null);
+        }
+    }
+
+    public void addPfleger(Pfleger p) {
+        if (!pflegerReinigung.contains(p)) {
+            pflegerReinigung.add(p);
+            p.getGereinigteGehege().add(this);
+        }
+    }
+
+    public void removePfleger(Pfleger p) {
+        if (pflegerReinigung.remove(p)) {
+            p.getGereinigteGehege().remove(this);
+        }
+    }
+
 }

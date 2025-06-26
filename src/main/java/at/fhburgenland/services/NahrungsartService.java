@@ -1,6 +1,6 @@
 package at.fhburgenland.services;
 
-import at.fhburgenland.entities.Nahrungsart;
+import at.fhburgenland.entities.*;
 import jakarta.persistence.*;
 import jakarta.validation.ConstraintViolationException;
 
@@ -10,11 +10,16 @@ import java.util.List;
 public class NahrungsartService {
     private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("project");
 
-    public static void create(Nahrungsart n){
+    public static void create(Nahrungsart n, List<Integer> planIds){
         EntityManager em = emf.createEntityManager();
         EntityTransaction et = null;
         try {
-            et = em.getTransaction(); et.begin();
+            et = em.getTransaction();
+            et.begin();
+            for (Integer pid : planIds) {
+                Fuetterungsplan f = em.getReference(Fuetterungsplan.class, pid);
+                n.addFuetterungsplan(f);
+            }
             em.persist(n);
             et.commit();
         } catch (Exception e){
@@ -61,7 +66,12 @@ public class NahrungsartService {
         try{
             et = em.getTransaction(); et.begin();
             Nahrungsart n = em.find(Nahrungsart.class, id);
-            em.remove(n);
+
+            if (n != null) {
+                n.getFuetterungsplaene().clear();
+                em.remove(n);
+            }
+
             et.commit();
         }
         catch (Exception e){

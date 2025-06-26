@@ -10,6 +10,7 @@ import java.util.List;
 public class GehegeService {
     private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("project");
 
+    // braucht auch Pfleger und Tier
     public static void create(Gehege gehege){
         EntityManager em = emf.createEntityManager();
         EntityTransaction et = null;
@@ -60,7 +61,10 @@ public class GehegeService {
         try{
             et = em.getTransaction(); et.begin();
             Gehege g = em.find(Gehege.class, id);
-            em.remove(g);
+            if (g != null) {
+                g.getTiere().clear();
+                em.remove(g);
+            }
             et.commit();
         }
         catch (Exception e){

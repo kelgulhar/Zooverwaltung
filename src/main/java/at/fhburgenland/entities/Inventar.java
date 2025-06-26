@@ -40,4 +40,20 @@ public class Inventar {
     public int getInventarId() {
         return inventarId;
     }
+
+    // Helper Methoden
+    // --- Inventar.java (M:N zu Pfleger) ---
+    public void addPfleger(Pfleger p) {
+        if (!verwalter.contains(p)) {
+            verwalter.add(p);
+            p.getInventarListe().add(this);
+        }
+    }
+
+    public void removePfleger(Pfleger p) {
+        if (verwalter.remove(p)) {
+            p.getInventarListe().remove(this);
+        }
+    }
+
 }

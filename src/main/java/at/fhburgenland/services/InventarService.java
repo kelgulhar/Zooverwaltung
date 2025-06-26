@@ -1,6 +1,6 @@
 package at.fhburgenland.services;
 
-import at.fhburgenland.entities.Inventar;
+import at.fhburgenland.entities.*;
 import jakarta.persistence.*;
 import jakarta.validation.ConstraintViolationException;
 
@@ -10,11 +10,16 @@ import java.util.List;
 public class InventarService {
     private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("project");
 
-    public static void create(Inventar inv){
+    public static void create(Inventar inv, List<Integer> pflegerIds){
         EntityManager em = emf.createEntityManager();
         EntityTransaction et = null;
         try {
-            et = em.getTransaction(); et.begin();
+            et = em.getTransaction();
+            et.begin();
+            for (Integer pid : pflegerIds) {
+                Pfleger p = em.getReference(Pfleger.class, pid);
+                inv.addPfleger(p);
+            }
             em.persist(inv);
             et.commit();
         } catch (Exception e){
@@ -61,7 +66,10 @@ public class InventarService {
         try{
             et = em.getTransaction(); et.begin();
             Inventar i = em.find(Inventar.class, id);
-            em.remove(i);
+            if (i != null) {
+                i.getVerwalter().clear();
+                em.remove(i);
+            }
             et.commit();
         } catch (Exception e){
             if(et != null) et.rollback();
