@@ -1,6 +1,9 @@
 package at.fhburgenland.services;
 
+import at.fhburgenland.entities.Besucher;
+import at.fhburgenland.entities.Fuehrung;
 import at.fhburgenland.entities.Gehege;
+import at.fhburgenland.entities.Pfleger;
 import jakarta.persistence.*;
 import jakarta.validation.ConstraintViolationException;
 
@@ -10,7 +13,6 @@ import java.util.List;
 public class GehegeService {
     private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("project");
 
-    // braucht auch Pfleger und Tier
     public static void create(Gehege gehege){
         EntityManager em = emf.createEntityManager();
         EntityTransaction et = null;
@@ -20,6 +22,33 @@ public class GehegeService {
             et.commit();
         } catch (Exception e){
             if (et != null) et.rollback();
+            System.err.println(e.getMessage());
+        } finally {
+            em.close();
+        }
+    }
+
+    public static void createConnectionToPfleger(int gehegeId, int pflegerId){
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction et = null;
+        Gehege g = null;
+        Pfleger p = null;
+        try {
+            et = em.getTransaction();
+            et.begin();
+
+            g = em.find(Gehege.class, gehegeId);
+            p = em.find(Pfleger.class, pflegerId);
+
+            if(p != null && g != null) {
+                p.addGehege(g);
+                g.addPfleger(p);
+            }
+
+            et.commit();
+        } catch (Exception e) {
+            if (et != null)
+                et.rollback();
             System.err.println(e.getMessage());
         } finally {
             em.close();

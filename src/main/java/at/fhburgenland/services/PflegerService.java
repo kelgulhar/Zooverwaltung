@@ -11,44 +11,13 @@ import at.fhburgenland.entities.*;
 public class PflegerService {
     private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("project");
 
-    public static void run(){
-        // TODO Menu und Logik für Pfleger
-    }
-
-    public static void create(Pfleger p,
-                              List<Integer> tierIds,
-                              List<Integer> gehegeIds,
-                              List<Integer> planIds,
-                              List<Integer> inventarIds,
-                              List<Integer> fuehrungIds)
+    public static void create(Pfleger p)
     {
         EntityManager em = emf.createEntityManager();
         EntityTransaction et = null;
         try {
             et = em.getTransaction();
             et.begin();
-
-            for (Integer tid : tierIds) {
-                Tier t = em.getReference(Tier.class, tid);
-                p.addTier(t);
-            }
-            for (Integer gid : gehegeIds) {
-                Gehege g = em.getReference(Gehege.class, gid);
-                p.addGehege(g);
-            }
-            for (Integer pid : planIds) {
-                Fuetterungsplan f = em.getReference(Fuetterungsplan.class, pid);
-                p.addFuetterungsplan(f);
-            }
-            for (Integer iid : inventarIds) {
-                Inventar i = em.getReference(Inventar.class, iid);
-                p.addInventar(i);
-            }
-            for (Integer fid : fuehrungIds) {
-                Fuehrung f = em.getReference(Fuehrung.class, fid);
-                p.addFuehrung(f);
-            }
-
             em.persist(p);
             et.commit();
         } catch (Exception e){
@@ -57,6 +26,64 @@ public class PflegerService {
         } finally {
             em.close();
         }
+    }
+
+    // Create connection to Fuehrung
+    public static void createConnectionToInventar(int pflegerId, int invId){
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction et = null;
+        Pfleger p = null;
+        Inventar i = null;
+        try {
+            et = em.getTransaction();
+            et.begin();
+
+            p = em.find(Pfleger.class, pflegerId);
+            i = em.find(Inventar.class, invId);
+
+            if(i != null && p != null){
+                p.addInventar(i);
+                i.addPfleger(p);
+            }
+
+            et.commit();
+        } catch (Exception e) {
+            if (et != null)
+                et.rollback();
+            System.err.println(e.getMessage());
+        } finally {
+            em.close();
+        }
+    }
+
+    public static String getStatistics(int pflegerId){
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction et = null;
+        Pfleger p = null;
+        Inventar i = null;
+        try {
+            et = em.getTransaction();
+            et.begin();
+
+            p = em.find(Pfleger.class, pflegerId);
+
+
+            if(p != null){
+                p.addInventar(i);
+                i.addPfleger(p);
+            }
+
+            // TODO Logik
+
+            et.commit();
+        } catch (Exception e) {
+            if (et != null)
+                et.rollback();
+            System.err.println(e.getMessage());
+        } finally {
+            em.close();
+        }
+        return "";
     }
 
     public static Pfleger find(int id){

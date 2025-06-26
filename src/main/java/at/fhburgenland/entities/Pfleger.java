@@ -10,6 +10,9 @@ import java.util.List;
 @Entity
 public class Pfleger {
 
+    public Pfleger(){
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int pflegerId;

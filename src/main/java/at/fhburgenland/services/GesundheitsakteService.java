@@ -10,10 +10,6 @@ import java.util.List;
 public class GesundheitsakteService {
     private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("project");
 
-    public static void run(){
-        // TODO Menu und Logik für Gesundheitsakte
-    }
-
     public static void create(Gesundheitsakte gesAkte, int tierId){
         EntityManager em = emf.createEntityManager();
         EntityTransaction et = null;
@@ -49,7 +45,6 @@ public class GesundheitsakteService {
     }
 
     public static void update(Gesundheitsakte gAkte){
-        // AUFPASSEN auf min max Notation von TIer
         EntityManager em = emf.createEntityManager();
         EntityTransaction et = null;
         Gesundheitsakte g = null;
@@ -61,9 +56,7 @@ public class GesundheitsakteService {
             g = em.find(Gesundheitsakte.class, gAkte.getAkteId());
             g.setBehandlungsart(gAkte.getBehandlungsart());
             g.setBehandlungsdatum(gAkte.getBehandlungsdatum());
-            g.setTier(gAkte.getTier());
-
-            // TODO selbes Drama mit min max wie bei delete
+            g.setTierPersistency(gAkte.getTier());
 
             em.persist(g);
             et.commit();
@@ -78,8 +71,6 @@ public class GesundheitsakteService {
     }
 
     public static void delete(int id){
-        // AUFPASSEN min-max Notation 1 Tier muss min 1 Akte haben?
-
         EntityManager em = emf.createEntityManager();
         EntityTransaction et = null;
         Gesundheitsakte g = null;

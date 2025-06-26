@@ -7,6 +7,7 @@ import java.util.List;
 
 @Entity
 public class Gehege {
+    public Gehege(){}
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,11 +19,10 @@ public class Gehege {
     // Gehege konnte gar nicht gelöscht werden
     // Deshalb veränderung der min max notation ein Gehege kann existieren ohne ein Tier zu beinhalten
     @OneToMany(mappedBy = "gehege")
-    @Size(max=10, message = "Ein Gehege beherbergt mindestens 1 und maximal 10 Tiere")
+    @Size(max=10, message = "Ein Gehege beherbergt maximal 10 Tiere")
     private List<Tier> tiere;
 
     @ManyToMany(mappedBy = "gereinigteGehege")
-    @Size(min = 1, message = "Gehege muss von mindestens einem Pfleger gereinigt werden")
     private List<Pfleger> pflegerReinigung;
 
     // Getter und Setter

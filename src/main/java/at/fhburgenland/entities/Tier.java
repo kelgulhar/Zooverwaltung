@@ -8,6 +8,8 @@ import java.util.List;
 @Entity
 public class Tier {
 
+    public Tier(){ }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="tier_id", updatable = false, nullable = false)
@@ -27,11 +29,10 @@ public class Tier {
     private Gehege gehege;
 
     @OneToMany(mappedBy = "tier")
-    @Size(min=1, message = "Ein Tier muss mindestens eine Gesundheitsakte besitzen")
     private List<Gesundheitsakte> gesundheitsakten;
 
     @ManyToMany(mappedBy = "gepflegteTiere")
-    @Size(min=1, max=3, message = "Ein Tier wird von mindestens einem und maximal 3 Pfleger gepflegt")
+    @Size(max=3, message = "Ein Tier wird von maximal 3 Pfleger gepflegt")
     private List<Pfleger> pflegerListe;
 
     // Getter und Setter
@@ -88,15 +89,6 @@ public class Tier {
     }
 
     // Helper
-    @PreRemove
-    private void preventDeleteIfLastInGehege() {
-        if (gehege.getTiere().size() <= 1) {
-            throw new IllegalStateException(
-                    "Kann letztes Tier in Gehege nicht löschen!");
-        }
-    }
-
-
     public void addGesundheitsakte(Gesundheitsakte ga) {
         if (!gesundheitsakten.contains(ga)) {
             gesundheitsakten.add(ga);

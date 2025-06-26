@@ -9,6 +9,9 @@ import java.util.List;
 @Table(name="besucher")
 public class Besucher {
 
+    public Besucher(){
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="besucher_id", updatable = false, nullable = false)
@@ -24,7 +27,7 @@ public class Besucher {
     @JoinTable(name = "Besucht",
         joinColumns = @JoinColumn(name = "besucher_id"),
         inverseJoinColumns = @JoinColumn(name = "fuehrung_id"))
-    @Size(min=1, max=3, message="Ein Besucher kann maximal 3 Führungen besuchen")
+    @Size(max=3, message="Ein Besucher kann maximal 3 Führungen besuchen")
     private List<Fuehrung> besuchteFuehrungen;
 
     // Getter und Setter

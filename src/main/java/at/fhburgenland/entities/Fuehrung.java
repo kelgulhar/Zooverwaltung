@@ -10,6 +10,8 @@ import java.util.List;
 @Entity
 public class Fuehrung {
 
+    public Fuehrung(){}
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int fuehrungId;
@@ -24,11 +26,11 @@ public class Fuehrung {
     private LocalTime uhrzeit;
 
     @ManyToMany(mappedBy = "fuehrungen")
-    @Size(min=1,max=1, message = "Eine Führung kann nur von einem Pfleger veranstaltet werden")
+    @Size(max=1, message = "Eine Führung kann nur von einem Pfleger veranstaltet werden")
     private List<Pfleger> veranstalter;
 
     @ManyToMany(mappedBy = "besuchteFuehrungen")
-    @Size(min=1, max=20, message = "Eine FÜhrung muss von mindestens 1 und maximal 20 Besuchern besucht werden")
+    @Size(max=20, message = "Eine FÜhrung muss von mindestens 1 und maximal 20 Besuchern besucht werden")
     private List<Besucher> besucherListe;
 
     // Getter und Setter

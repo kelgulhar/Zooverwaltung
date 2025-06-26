@@ -10,26 +10,43 @@ import java.util.List;
 public class FuehrungService {
     private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("project");
 
-    public static void create(Fuehrung f, List<Integer> pflegerIds, List<Integer> besucherIds){
+    public static void create(Fuehrung f){
         EntityManager em = emf.createEntityManager();
         EntityTransaction et = null;
         try {
             et = em.getTransaction();
             et.begin();
-
-            for (Integer pid : pflegerIds) {
-                Pfleger p = em.getReference(Pfleger.class, pid);
-                f.addPfleger(p);
-            }
-            for (Integer bid : besucherIds) {
-                Besucher b = em.getReference(Besucher.class, bid);
-                f.addBesucher(b);
-            }
-
             em.persist(f);
             et.commit();
         } catch (Exception e){
             if (et != null) et.rollback();
+            System.err.println(e.getMessage());
+        } finally {
+            em.close();
+        }
+    }
+
+    public static void createConnectionToPfleger(int fuehrungId, int pflegerId){
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction et = null;
+        Fuehrung f = null;
+        Pfleger p = null;
+        try {
+            et = em.getTransaction();
+            et.begin();
+
+            f = em.find(Fuehrung.class, fuehrungId);
+            p = em.find(Pfleger.class, pflegerId);
+
+            if(f != null && p != null){
+                p.addFuehrung(f);
+                f.addPfleger(p);
+            }
+
+            et.commit();
+        } catch (Exception e) {
+            if (et != null)
+                et.rollback();
             System.err.println(e.getMessage());
         } finally {
             em.close();

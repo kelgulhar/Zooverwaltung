@@ -5,6 +5,8 @@ import java.util.List;
 
 @Entity
 public class Nahrungsart {
+    public Nahrungsart(){
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

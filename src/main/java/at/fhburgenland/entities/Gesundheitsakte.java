@@ -6,6 +6,9 @@ import java.util.Date;
 @Entity
 public class Gesundheitsakte {
 
+    public Gesundheitsakte(){
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int akteId;

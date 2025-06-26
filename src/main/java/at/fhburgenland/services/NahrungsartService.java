@@ -10,20 +10,43 @@ import java.util.List;
 public class NahrungsartService {
     private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("project");
 
-    public static void create(Nahrungsart n, List<Integer> planIds){
+    public static void create(Nahrungsart n){
         EntityManager em = emf.createEntityManager();
         EntityTransaction et = null;
         try {
             et = em.getTransaction();
             et.begin();
-            for (Integer pid : planIds) {
-                Fuetterungsplan f = em.getReference(Fuetterungsplan.class, pid);
-                n.addFuetterungsplan(f);
-            }
             em.persist(n);
             et.commit();
         } catch (Exception e){
             if (et != null) et.rollback();
+            System.err.println(e.getMessage());
+        } finally {
+            em.close();
+        }
+    }
+
+    public static void createConnectionToFuetterung(int nahrungId, int fuetterungId){
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction et = null;
+        Nahrungsart n = null;
+        Fuetterungsplan f = null;
+        try {
+            et = em.getTransaction();
+            et.begin();
+
+            n = em.find(Nahrungsart.class, nahrungId);
+            f = em.find(Fuetterungsplan.class, fuetterungId);
+
+            if(n != null && f != null){
+                n.addFuetterungsplan(f);
+                f.addNahrungsart(n);
+            }
+
+            et.commit();
+        } catch (Exception e) {
+            if (et != null)
+                et.rollback();
             System.err.println(e.getMessage());
         } finally {
             em.close();

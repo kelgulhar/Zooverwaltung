@@ -11,11 +11,7 @@ public class TierService {
 
     private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("project");
 
-    // braucht auch Pfleger
-    // legt hier automatisch Gesundheitsakte mit an MUSS SOGAR
-    public static void create(Tier tier, int gehegeId,
-                              List<Integer> pflegerIds,
-                              List<Gesundheitsakte> akten) {
+    public static void create(Tier tier, int gehegeId) {
         EntityManager em = emf.createEntityManager();
         EntityTransaction et = null;
         try {
@@ -24,14 +20,6 @@ public class TierService {
 
             Gehege g = em.getReference(Gehege.class, gehegeId);
             tier.setGehege(g);
-            for (int pid : pflegerIds) {
-                Pfleger p = em.getReference(Pfleger.class, pid);
-                tier.addPfleger(p);
-            }
-            for (Gesundheitsakte ga : akten) {
-                tier.addGesundheitsakte(ga);
-                em.persist(ga);
-            }
 
             em.persist(tier);
             et.commit();
@@ -41,6 +29,33 @@ public class TierService {
                 et.rollback();
                 System.err.println(e.getMessage());
             }
+        } finally {
+            em.close();
+        }
+    }
+
+    public static void createConnectionToPfleger(int tierId, int pflegerId){
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction et = null;
+        Tier t = null;
+        Pfleger p = null;
+        try {
+            et = em.getTransaction();
+            et.begin();
+
+            t = em.find(Tier.class, tierId);
+            p = em.find(Pfleger.class, p);
+
+            if(t != null && p != null){
+                t.addPfleger(p);
+                p.addTier(t);
+            }
+
+            et.commit();
+        } catch (Exception e) {
+            if (et != null)
+                et.rollback();
+            System.err.println(e.getMessage());
         } finally {
             em.close();
         }
@@ -60,7 +75,6 @@ public class TierService {
     }
 
     public static void update(Tier tier) {
-        // AUFPASSEN auf min max Notation von Gehege
         EntityManager em = emf.createEntityManager();
         EntityTransaction et = null;
         Tier t = null;
@@ -73,6 +87,11 @@ public class TierService {
             t.setTierart(tier.getTierart());
             t.setName(tier.getName());
             t.setAlter(tier.getAlter());
+
+            //update/move tier
+            tier.getGehege().addTier(tier);
+            t.getGehege().removeTier(t);
+
             t.setGehege(tier.getGehege());
 
             em.persist(t);

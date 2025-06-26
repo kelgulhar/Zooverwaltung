@@ -10,27 +10,43 @@ import java.util.List;
 public class FuetterungsplanService {
     private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("project");
 
-    public static void create(Fuetterungsplan f, List<Integer> nahrungIds,
-                              List<Integer> pflegerIds){
+    public static void create(Fuetterungsplan f){
         EntityManager em = emf.createEntityManager();
         EntityTransaction et = null;
         try {
             et = em.getTransaction();
             et.begin();
-
-            for (Integer nid : nahrungIds) {
-                Nahrungsart n = em.getReference(Nahrungsart.class, nid);
-                f.addNahrungsart(n);
-            }
-            for (Integer pid : pflegerIds) {
-                Pfleger p = em.getReference(Pfleger.class, pid);
-                f.addPfleger(p);
-            }
-
             em.persist(f);
             et.commit();
         } catch (Exception e){
             if (et != null) et.rollback();
+            System.err.println(e.getMessage());
+        } finally {
+            em.close();
+        }
+    }
+
+    public static void createConnectionToPfleger(int fuetterungId, int pflegerId){
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction et = null;
+        Pfleger p = null;
+        Fuetterungsplan f = null;
+        try {
+            et = em.getTransaction();
+            et.begin();
+
+            p = em.find(Pfleger.class, pflegerId);
+            f = em.find(Fuetterungsplan.class, fuetterungId);
+
+            if(p != null && f != null){
+                p.addFuetterungsplan(f);
+                f.addPfleger(p);
+            }
+
+            et.commit();
+        } catch (Exception e) {
+            if (et != null)
+                et.rollback();
             System.err.println(e.getMessage());
         } finally {
             em.close();

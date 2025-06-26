@@ -10,6 +10,7 @@ import java.util.List;
 @Entity(name = "Fuetterungsplan")
 @Table(name = "fuetterungsplan")
 public class Fuetterungsplan {
+    public Fuetterungsplan(){}
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,14 +24,12 @@ public class Fuetterungsplan {
     private LocalDate datum;
 
     @ManyToMany(mappedBy = "fuetterungsplaene")
-    @Size(min=1, message = "Eine Fütterung muss von mindestens einem Pfleger durchgeführt werden")
     private List<Pfleger> pflegerListe;
 
     @ManyToMany
     @JoinTable(name = "Fuetterungsplan_Nahrungsart",
         joinColumns = @JoinColumn(name = "plan_id"),
         inverseJoinColumns = @JoinColumn(name = "nahrung_id"))
-    @Size(min=1, message = "Eine Fütterung enthält mindestens eine Nahrungsart")
     private List<Nahrungsart> nahrungsarten;
 
     // Getter und Setter

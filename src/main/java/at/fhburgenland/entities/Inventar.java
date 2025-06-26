@@ -7,6 +7,8 @@ import java.util.List;
 
 @Entity
 public class Inventar {
+    public Inventar(){
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,7 +18,6 @@ public class Inventar {
     private String bezeichnung;
 
     @ManyToMany(mappedBy = "inventarListe")
-    @Size(min=1, message = "Ein Inventaritem muss von mindestens einem Pfleger verwaltet werden")
     private List<Pfleger> verwalter;
 
     // Getter und Setter

@@ -10,16 +10,12 @@ import java.util.List;
 public class InventarService {
     private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("project");
 
-    public static void create(Inventar inv, List<Integer> pflegerIds){
+    public static void create(Inventar inv){
         EntityManager em = emf.createEntityManager();
         EntityTransaction et = null;
         try {
             et = em.getTransaction();
             et.begin();
-            for (Integer pid : pflegerIds) {
-                Pfleger p = em.getReference(Pfleger.class, pid);
-                inv.addPfleger(p);
-            }
             em.persist(inv);
             et.commit();
         } catch (Exception e){
