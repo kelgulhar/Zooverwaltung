@@ -70,4 +70,32 @@ public class Fuetterungsplan {
     public void setNahrungsarten(List<Nahrungsart> nahrungsarten) {
         this.nahrungsarten = nahrungsarten;
     }
+
+    // Helper Methoden
+    public void addNahrungsart(Nahrungsart n) {
+        if (!nahrungsarten.contains(n)) {
+            nahrungsarten.add(n);
+            n.getFuetterungsplaene().add(this);
+        }
+    }
+
+    public void removeNahrungsart(Nahrungsart n) {
+        if (nahrungsarten.remove(n)) {
+            n.getFuetterungsplaene().remove(this);
+        }
+    }
+
+    public void addPfleger(Pfleger p) {
+        if (!pflegerListe.contains(p)) {
+            pflegerListe.add(p);
+            p.getFuetterungsplaene().add(this);
+        }
+    }
+
+    public void removePfleger(Pfleger p) {
+        if (pflegerListe.remove(p)) {
+            p.getFuetterungsplaene().remove(this);
+        }
+    }
+
 }

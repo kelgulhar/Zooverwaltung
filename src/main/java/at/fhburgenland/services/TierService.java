@@ -1,6 +1,6 @@
 package at.fhburgenland.services;
 
-import at.fhburgenland.entities.Tier;
+import at.fhburgenland.entities.*;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -15,12 +15,28 @@ public class TierService {
         // TODO Menu und Logik für Tier
     }
 
-    public static void create(Tier tier) {
+    // braucht auch Pfleger
+    // legt hier automatisch Gesundheitsakte mit an MUSS SOGAR
+    public static void create(Tier tier, int gehegeId,
+                              List<Integer> pflegerIds,
+                              List<Gesundheitsakte> akten) {
         EntityManager em = emf.createEntityManager();
         EntityTransaction et = null;
         try {
             et = em.getTransaction();
             et.begin();
+
+            Gehege g = em.getReference(Gehege.class, gehegeId);
+            tier.setGehege(g);
+            for (int pid : pflegerIds) {
+                Pfleger p = em.getReference(Pfleger.class, pid);
+                tier.addPfleger(p);
+            }
+            for (Gesundheitsakte ga : akten) {
+                tier.addGesundheitsakte(ga);
+                em.persist(ga);
+            }
+
             em.persist(tier);
             et.commit();
 
@@ -63,9 +79,6 @@ public class TierService {
             t.setAlter(tier.getAlter());
             t.setGehege(tier.getGehege());
 
-            // TODO Gehegeservice.find(t.gehegeId) != null ? continue : abort
-            // TODO Gehegeservice.find(tier.gehegeId) <= 10 ? continue : abort
-
             em.persist(t);
             et.commit();
         } catch (Exception e){
@@ -79,12 +92,9 @@ public class TierService {
     }
 
     public static void delete(int id) {
-        // AUFPASSEN auf Gesundheitsakte und Gehege
-
         EntityManager em = emf.createEntityManager();
         EntityTransaction et = null;
         Tier t = null;
-        // List Gesundheitsakten???
 
         try{
             et = em.getTransaction();
@@ -92,13 +102,15 @@ public class TierService {
 
             t = em.find(Tier.class, id);
 
-            // TODO Gehegeservice.find(t.gehegeId) != null ? continue : abort
-            // oder mit Gehegeservice.delete(t.gehegeId)
+            if (t != null) {
+                t.getPflegerListe().clear();
+                t.getGesundheitsakten().clear();
+                em.createQuery("DELETE FROM Gesundheitsakte g WHERE g.tier.tierId = :tid"
+                ).setParameter("tid", id).executeUpdate();
 
-            // TODO Gesundheitsakteservice.findAllByTierId(tierId)
-            // TODO foreach Gesundheitsservice.delete(id)
+                em.remove(t);
+            }
 
-            em.remove(t);
             et.commit();
         } catch (Exception e){
             if(et != null){

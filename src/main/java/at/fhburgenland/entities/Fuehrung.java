@@ -24,7 +24,7 @@ public class Fuehrung {
     private LocalTime uhrzeit;
 
     @ManyToMany(mappedBy = "fuehrungen")
-    @Size(max=1, message = "Eine Führung kann nur von einem Pfleger veranstaltet werden")
+    @Size(min=1,max=1, message = "Eine Führung kann nur von einem Pfleger veranstaltet werden")
     private List<Pfleger> veranstalter;
 
     @ManyToMany(mappedBy = "besuchteFuehrungen")
@@ -76,4 +76,32 @@ public class Fuehrung {
     public void setBesucherListe(List<Besucher> besucherListe) {
         this.besucherListe = besucherListe;
     }
+
+    // Helper Klassen
+    public void addPfleger(Pfleger p) {
+        if (!veranstalter.contains(p)) {
+            veranstalter.add(p);
+            p.getFuehrungen().add(this);
+        }
+    }
+
+    public void removePfleger(Pfleger p) {
+        if (veranstalter.remove(p)) {
+            p.getFuehrungen().remove(this);
+        }
+    }
+
+    public void addBesucher(Besucher b) {
+        if (!besucherListe.contains(b)) {
+            besucherListe.add(b);
+            b.getBesuchteFuehrungen().add(this);
+        }
+    }
+
+    public void removeBesucher(Besucher b) {
+        if (besucherListe.remove(b)) {
+            b.getBesuchteFuehrungen().remove(this);
+        }
+    }
+
 }

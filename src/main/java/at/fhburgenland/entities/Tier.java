@@ -1,6 +1,8 @@
 package at.fhburgenland.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
+
 import java.util.List;
 
 @Entity
@@ -24,10 +26,12 @@ public class Tier {
     @JoinColumn(name = "gehege_id", nullable = false)
     private Gehege gehege;
 
-    @OneToMany(mappedBy = "tier", cascade = CascadeType.ALL) // TODO Cascade selbst implementieren
+    @OneToMany(mappedBy = "tier")
+    @Size(min=1, message = "Ein Tier muss mindestens eine Gesundheitsakte besitzen")
     private List<Gesundheitsakte> gesundheitsakten;
 
     @ManyToMany(mappedBy = "gepflegteTiere")
+    @Size(min=1, max=3, message = "Ein Tier wird von mindestens einem und maximal 3 Pfleger gepflegt")
     private List<Pfleger> pflegerListe;
 
     // Getter und Setter
@@ -82,4 +86,41 @@ public class Tier {
     public void setPflegerListe(List<Pfleger> pflegerListe) {
         this.pflegerListe = pflegerListe;
     }
+
+    // Helper
+    @PreRemove
+    private void preventDeleteIfLastInGehege() {
+        if (gehege.getTiere().size() <= 1) {
+            throw new IllegalStateException(
+                    "Kann letztes Tier in Gehege nicht löschen!");
+        }
+    }
+
+
+    public void addGesundheitsakte(Gesundheitsakte ga) {
+        if (!gesundheitsakten.contains(ga)) {
+            gesundheitsakten.add(ga);
+            ga.setTier(this);
+        }
+    }
+
+    public void removeGesundheitsakte(Gesundheitsakte ga) {
+        if (gesundheitsakten.remove(ga)) {
+            ga.setTier(null);
+        }
+    }
+
+    public void addPfleger(Pfleger p) {
+        if (!pflegerListe.contains(p)) {
+            pflegerListe.add(p);
+            p.getGepflegteTiere().add(this);
+        }
+    }
+
+    public void removePfleger(Pfleger p) {
+        if (pflegerListe.remove(p)) {
+            p.getGepflegteTiere().remove(this);
+        }
+    }
+
 }

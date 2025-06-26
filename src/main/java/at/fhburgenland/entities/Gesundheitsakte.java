@@ -49,4 +49,13 @@ public class Gesundheitsakte {
     public void setTier(Tier tier) {
         this.tier = tier;
     }
+
+    // Helper Methoden
+    public void setTierPersistency(Tier t) {
+        this.tier = t;
+        if (t != null && !t.getGesundheitsakten().contains(this)) {
+            t.getGesundheitsakten().add(this);
+        }
+    }
+
 }

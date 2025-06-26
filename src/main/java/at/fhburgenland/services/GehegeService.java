@@ -14,6 +14,7 @@ public class GehegeService {
         // TODO Menu und Logik für Gehege
     }
 
+    // braucht auch Pfleger und Tier
     public static void create(Gehege gehege){
         EntityManager em = emf.createEntityManager();
         EntityTransaction et = null;
@@ -64,7 +65,10 @@ public class GehegeService {
         try{
             et = em.getTransaction(); et.begin();
             Gehege g = em.find(Gehege.class, id);
-            em.remove(g);
+            if (g != null) {
+                g.getTiere().clear();
+                em.remove(g);
+            }
             et.commit();
         } catch (ConstraintViolationException cve){
             if(et.isActive()){

@@ -1,6 +1,6 @@
 package at.fhburgenland.services;
 
-import at.fhburgenland.entities.Besucher;
+import at.fhburgenland.entities.*;
 import jakarta.persistence.*;
 import jakarta.validation.ConstraintViolationException;
 
@@ -14,11 +14,17 @@ public class BesucherService {
         // TODO Menu und Logik für Besucher
     }
 
-    public static void create(Besucher b){
+    public static void create(Besucher b, List<Integer> fuehrungIds){
         EntityManager em = emf.createEntityManager();
         EntityTransaction et = null;
         try {
-            et = em.getTransaction(); et.begin();
+            et = em.getTransaction();
+            et.begin();
+
+            for (Integer fid : fuehrungIds) {
+                Fuehrung f = em.getReference(Fuehrung.class, fid);
+                b.addFuehrung(f);
+            }
             em.persist(b);
             et.commit();
         } catch (Exception e){
@@ -45,7 +51,8 @@ public class BesucherService {
         EntityManager em = emf.createEntityManager();
         EntityTransaction et = null;
         try{
-            et = em.getTransaction(); et.begin();
+            et = em.getTransaction();
+            et.begin();
             Besucher existing = em.find(Besucher.class, b.getBesucherId());
             existing.setVorname(b.getVorname());
             existing.setNachname(b.getNachname());
@@ -69,9 +76,13 @@ public class BesucherService {
         EntityManager em = emf.createEntityManager();
         EntityTransaction et = null;
         try{
-            et = em.getTransaction(); et.begin();
+            et = em.getTransaction();
+            et.begin();
             Besucher b = em.find(Besucher.class, id);
-            em.remove(b);
+            if (b != null) {
+                b.getBesuchteFuehrungen().clear();
+                em.remove(b);
+            }
             et.commit();
         } catch (ConstraintViolationException cve){
             if(et.isActive()){

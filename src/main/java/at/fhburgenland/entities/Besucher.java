@@ -24,7 +24,7 @@ public class Besucher {
     @JoinTable(name = "Besucht",
         joinColumns = @JoinColumn(name = "besucher_id"),
         inverseJoinColumns = @JoinColumn(name = "fuehrung_id"))
-    @Size(max=3, message="Ein Besucher kann maximal 3 Führungen besuchen")
+    @Size(max=3, message="Ein Besucher kann maximal 3 Führungen besuchen")  // ich lass jz so das ein Besuch optional ist
     private List<Fuehrung> besuchteFuehrungen;
 
     // Getter und Setter
@@ -55,5 +55,19 @@ public class Besucher {
 
     public void setBesuchteFuehrungen(List<Fuehrung> besuchteFuehrungen) {
         this.besuchteFuehrungen = besuchteFuehrungen;
+    }
+
+    // Helper Methoden
+    public void addFuehrung(Fuehrung f) {
+        if (!besuchteFuehrungen.contains(f)) {
+            besuchteFuehrungen.add(f);
+            f.getBesucherListe().add(this);
+        }
+    }
+
+    public void removeFuehrung(Fuehrung f) {
+        if (besuchteFuehrungen.remove(f)) {
+            f.getBesucherListe().remove(this);
+        }
     }
 }

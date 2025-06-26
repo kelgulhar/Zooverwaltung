@@ -1,6 +1,7 @@
 package at.fhburgenland.services;
 
 import at.fhburgenland.entities.Gesundheitsakte;
+import at.fhburgenland.entities.Tier;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -13,12 +14,14 @@ public class GesundheitsakteService {
         // TODO Menu und Logik für Gesundheitsakte
     }
 
-    public static void create(Gesundheitsakte gesAkte){
+    public static void create(Gesundheitsakte gesAkte, int tierId){
         EntityManager em = emf.createEntityManager();
         EntityTransaction et = null;
         try {
             et = em.getTransaction();
             et.begin();
+            Tier t = em.getReference(Tier.class, tierId);
+            t.addGesundheitsakte(gesAkte);
             em.persist(gesAkte);
             et.commit();
 
@@ -86,18 +89,14 @@ public class GesundheitsakteService {
             et.begin();
 
             g = em.find(Gesundheitsakte.class, id);
+            if (g != null) {
+                Tier t = g.getTier();
+                if (t != null) {
+                    t.getGesundheitsakten().remove(g);
+                }
+                em.remove(g);
+            }
 
-            // TODO Gesundheitsakte muss min einmal für Tier existieren
-            /*
-            List<Gesundheitsakte> gAkten = findALl();
-            if (gAkten.size() < 2)
-                abort???
-
-                wenn 1 oder weniger wäre dann würde durch löschen nichts mehr da sein
-            */
-
-
-            em.remove(g);
             et.commit();
         } catch (Exception e){
             if(et != null){

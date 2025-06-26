@@ -1,6 +1,6 @@
 package at.fhburgenland.services;
 
-import at.fhburgenland.entities.Fuetterungsplan;
+import at.fhburgenland.entities.*;
 import jakarta.persistence.*;
 import jakarta.validation.ConstraintViolationException;
 
@@ -14,11 +14,23 @@ public class FuetterungsplanService {
         // TODO Menu und Logik für Fuetterungsplan
     }
 
-    public static void create(Fuetterungsplan f){
+    public static void create(Fuetterungsplan f, List<Integer> nahrungIds,
+                              List<Integer> pflegerIds){
         EntityManager em = emf.createEntityManager();
         EntityTransaction et = null;
         try {
-            et = em.getTransaction(); et.begin();
+            et = em.getTransaction();
+            et.begin();
+
+            for (Integer nid : nahrungIds) {
+                Nahrungsart n = em.getReference(Nahrungsart.class, nid);
+                f.addNahrungsart(n);
+            }
+            for (Integer pid : pflegerIds) {
+                Pfleger p = em.getReference(Pfleger.class, pid);
+                f.addPfleger(p);
+            }
+
             em.persist(f);
             et.commit();
         } catch (Exception e){
@@ -69,9 +81,14 @@ public class FuetterungsplanService {
         EntityManager em = emf.createEntityManager();
         EntityTransaction et = null;
         try{
-            et = em.getTransaction(); et.begin();
+            et = em.getTransaction();
+            et.begin();
             Fuetterungsplan f = em.find(Fuetterungsplan.class, id);
-            em.remove(f);
+            if (f != null) {
+                f.getNahrungsarten().clear();
+                f.getPflegerListe().clear();
+                em.remove(f);
+            }
             et.commit();
         } catch (Exception e){
             if(et != null) et.rollback();

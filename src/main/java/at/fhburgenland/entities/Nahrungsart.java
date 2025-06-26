@@ -14,7 +14,7 @@ public class Nahrungsart {
     private String bezeichnung;
 
     @ManyToMany(mappedBy = "nahrungsarten")
-    private List<Fuetterungsplan> fuetterungsplaene;
+    private List<Fuetterungsplan> fuetterungsplaene;    // n Nahrungsarten können in n Führungen vorkommen
 
 
     // Getter und Setter
@@ -38,4 +38,19 @@ public class Nahrungsart {
     public void setFuetterungsplaene(List<Fuetterungsplan> fuetterungsplaene) {
         this.fuetterungsplaene = fuetterungsplaene;
     }
+
+    // Helper Methoden
+    public void addFuetterungsplan(Fuetterungsplan f) {
+        if (!fuetterungsplaene.contains(f)) {
+            fuetterungsplaene.add(f);
+            f.getNahrungsarten().add(this);
+        }
+    }
+
+    public void removeFuetterungsplan(Fuetterungsplan f) {
+        if (fuetterungsplaene.remove(f)) {
+            f.getNahrungsarten().remove(this);
+        }
+    }
+
 }

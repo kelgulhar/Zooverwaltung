@@ -1,6 +1,6 @@
 package at.fhburgenland.services;
 
-import at.fhburgenland.entities.Fuehrung;
+import at.fhburgenland.entities.*;
 import jakarta.persistence.*;
 import jakarta.validation.ConstraintViolationException;
 
@@ -14,11 +14,23 @@ public class FuehrungService {
         // TODO Menu und Logik für Führung
     }
 
-    public static void create(Fuehrung f){
+    public static void create(Fuehrung f,List<Integer> pflegerIds,
+                              List<Integer> besucherIds){
         EntityManager em = emf.createEntityManager();
         EntityTransaction et = null;
         try {
-            et = em.getTransaction(); et.begin();
+            et = em.getTransaction();
+            et.begin();
+
+            for (Integer pid : pflegerIds) {
+                Pfleger p = em.getReference(Pfleger.class, pid);
+                f.addPfleger(p);
+            }
+            for (Integer bid : besucherIds) {
+                Besucher b = em.getReference(Besucher.class, bid);
+                f.addBesucher(b);
+            }
+
             em.persist(f);
             et.commit();
         } catch (Exception e){
@@ -72,7 +84,11 @@ public class FuehrungService {
         try{
             et = em.getTransaction(); et.begin();
             Fuehrung f = em.find(Fuehrung.class, id);
-            em.remove(f);
+            if (f != null) {
+                f.getVeranstalter().clear();
+                f.getBesucherListe().clear();
+                em.remove(f);
+            }
             et.commit();
         } catch (Exception e){
             if(et != null) et.rollback();
