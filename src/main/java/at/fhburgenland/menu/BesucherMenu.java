@@ -62,4 +62,31 @@ public class BesucherMenu {
             System.out.println("Besucher nicht gefunden.");
         }
     }
+
+    private void update() {
+        System.out.println("Besucher-ID eingeben:");
+        int id = Integer.parseInt(scanner.nextLine());
+
+        System.out.println("Neuer Vorname:");
+        String vorname = scanner.nextLine();
+        System.out.println("Neuer Nachname:");
+        String nachname = scanner.nextLine();
+
+        Besucher besucher = new Besucher();
+        besucher.setBesucherId(id);
+        besucher.setVorname(vorname);
+        besucher.setNachname(nachname);
+
+        service.updateBesucher(id, besucher);
+    }
+
+    private void delete() {
+        System.out.println("ID eingeben:");
+        int id = Integer.parseInt(scanner.nextLine());
+        service.deleteBesucher(id);
+    }
+
+    private void listAll() {
+        service.findAll().forEach(System.out::println);
+    }
 }

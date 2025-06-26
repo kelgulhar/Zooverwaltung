@@ -10,7 +10,7 @@ import java.util.List;
 public class FuehrungService {
     private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("project");
 
-    public static void create(Fuehrung f){
+    public static void create(Fuehrung f, List<Integer> pflegerIds, List<Integer> besucherIds){
         EntityManager em = emf.createEntityManager();
         EntityTransaction et = null;
         try {

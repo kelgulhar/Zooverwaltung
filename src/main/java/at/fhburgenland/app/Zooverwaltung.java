@@ -3,7 +3,6 @@ package at.fhburgenland.app;
 import java.util.Scanner;
 
 public class Zooverwaltung {
-    // TODO Fields of Zooverwaltung
     private Scanner scanner = new Scanner(System.in);
 
     public Zooverwaltung() {
@@ -42,15 +41,5 @@ public class Zooverwaltung {
                 }
             }
         }
-    }
-
-    private void printMenuGesundheitsakte() {
-        String text = """
-                1 - Gesundheitsakte anlegen
-                2 - Gesundheitsakte lesen
-                3 - Gesundheitsakte bearbeiten
-                4 - Gesundheitsakte löschen
-                5 - Alle Gesundheitsakten ausgeben
-                """;
     }
 }

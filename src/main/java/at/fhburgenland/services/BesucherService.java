@@ -10,11 +10,7 @@ import java.util.List;
 public class BesucherService {
     private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("project");
 
-    public static void run(){
-        // TODO Menu und Logik für Besucher
-    }
-
-    public static void create(Besucher b, List<Integer> fuehrungIds){
+    public static void create(Besucher b, List<Integer> fuehrungIds) {
         EntityManager em = emf.createEntityManager();
         EntityTransaction et = null;
         try {
@@ -27,7 +23,7 @@ public class BesucherService {
             }
             em.persist(b);
             et.commit();
-        } catch (Exception e){
+        } catch (Exception e) {
             if (et != null) et.rollback();
             System.err.println(e.getMessage());
         } finally {
@@ -35,22 +31,22 @@ public class BesucherService {
         }
     }
 
-    public static Besucher find(int id){
+    public static Besucher find(int id) {
         EntityManager em = emf.createEntityManager();
-        try{
+        try {
             return em.find(Besucher.class, id);
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
-        } finally{
+        } finally {
             em.close();
         }
     }
 
-    public static void update(Besucher b){
+    public static void update(Besucher b) {
         EntityManager em = emf.createEntityManager();
         EntityTransaction et = null;
-        try{
+        try {
             et = em.getTransaction();
             et.begin();
             Besucher existing = em.find(Besucher.class, b.getBesucherId());
@@ -58,24 +54,18 @@ public class BesucherService {
             existing.setNachname(b.getNachname());
             em.persist(existing);
             et.commit();
-        } catch(ConstraintViolationException cve){
-            if(et.isActive()){
-                et.rollback();
-            }
-            System.err.println(cve.getMessage());
-        }
-        catch (Exception e){
-            if(et != null) et.rollback();
+        } catch (Exception e) {
+            if (et != null) et.rollback();
             System.err.println(e.getMessage());
-        } finally{
+        } finally {
             em.close();
         }
     }
 
-    public static void delete(int id){
+    public static void delete(int id) {
         EntityManager em = emf.createEntityManager();
         EntityTransaction et = null;
-        try{
+        try {
             et = em.getTransaction();
             et.begin();
             Besucher b = em.find(Besucher.class, id);
@@ -84,31 +74,26 @@ public class BesucherService {
                 em.remove(b);
             }
             et.commit();
-        } catch (ConstraintViolationException cve){
-            if(et.isActive()){
-                et.rollback();
-            }
-            System.err.println(cve.getMessage());
         } catch (Exception e) {
-            if(et != null) {
+            if (et != null) {
                 et.rollback();
             }
             System.err.println(e.getMessage());
-        } finally{
+        } finally {
             em.close();
         }
     }
 
-    public static List<Besucher> findAll(){
+    public static List<Besucher> findAll() {
         EntityManager em = emf.createEntityManager();
         String q = "SELECT b FROM Besucher b";
         TypedQuery<Besucher> tq = em.createQuery(q, Besucher.class);
-        try{
+        try {
             return tq.getResultList();
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return new ArrayList<>();
-        } finally{
+        } finally {
             em.close();
         }
     }
