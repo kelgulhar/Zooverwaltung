@@ -10,10 +10,6 @@ import java.util.List;
 public class FuehrungService {
     private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("project");
 
-    public static void run(){
-        // TODO Menu und Logik für Führung
-    }
-
     public static void create(Fuehrung f){
         EntityManager em = emf.createEntityManager();
         EntityTransaction et = null;
@@ -52,11 +48,6 @@ public class FuehrungService {
             existing.setGehegeroute(f.getGehegeroute());
             em.persist(existing);
             et.commit();
-        } catch(ConstraintViolationException cve){
-            if(et.isActive()){
-                et.rollback();
-            }
-            System.err.println(cve.getMessage());
         }
         catch (Exception e){
             if(et != null) et.rollback();

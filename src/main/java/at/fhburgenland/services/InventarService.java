@@ -10,10 +10,6 @@ import java.util.List;
 public class InventarService {
     private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("project");
 
-    public static void run(){
-        // TODO Menu und Logik für Inventar
-    }
-
     public static void create(Inventar inv){
         EntityManager em = emf.createEntityManager();
         EntityTransaction et = null;
@@ -50,11 +46,6 @@ public class InventarService {
             existing.setBezeichnung(i.getBezeichnung());
             em.persist(existing);
             et.commit();
-        } catch (ConstraintViolationException cve){
-            if(et.isActive()){
-                et.rollback();
-            }
-            System.err.println(cve.getMessage());
         }
         catch (Exception e){
             if(et != null) et.rollback();

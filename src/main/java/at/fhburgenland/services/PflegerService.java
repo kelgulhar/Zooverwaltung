@@ -10,10 +10,6 @@ import java.util.List;
 public class PflegerService {
     private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("project");
 
-    public static void run(){
-        // TODO Menu und Logik für Pfleger
-    }
-
     public static void create(Pfleger p){
         EntityManager em = emf.createEntityManager();
         EntityTransaction et = null;
@@ -53,11 +49,6 @@ public class PflegerService {
             existing.setGebDat(p.getGebDat());
             em.persist(existing);
             et.commit();
-        } catch (ConstraintViolationException cve){
-            if(et.isActive()){
-                et.rollback();
-            }
-            System.err.println(cve.getMessage());
         }
         catch (Exception e){
             if(et != null) et.rollback();
@@ -75,11 +66,6 @@ public class PflegerService {
             Pfleger p = em.find(Pfleger.class, id);
             em.remove(p);
             et.commit();
-        } catch (ConstraintViolationException cve) {
-            if(et.isActive()){
-                et.rollback();
-            }
-            System.err.println(cve.getMessage());
         }
         catch (Exception e){
             if(et != null) et.rollback();

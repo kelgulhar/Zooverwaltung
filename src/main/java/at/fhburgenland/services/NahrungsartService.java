@@ -10,10 +10,6 @@ import java.util.List;
 public class NahrungsartService {
     private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("project");
 
-    public static void run(){
-        // TODO Menu und Logik für Nahrungsart
-    }
-
     public static void create(Nahrungsart n){
         EntityManager em = emf.createEntityManager();
         EntityTransaction et = null;
@@ -50,11 +46,6 @@ public class NahrungsartService {
             existing.setBezeichnung(n.getBezeichnung());
             em.persist(existing);
             et.commit();
-        } catch (ConstraintViolationException cve){
-            if(et.isActive()){
-                et.rollback();
-            }
-            System.err.println(cve.getMessage());
         }
         catch (Exception e){
             if(et != null) et.rollback();
@@ -72,11 +63,6 @@ public class NahrungsartService {
             Nahrungsart n = em.find(Nahrungsart.class, id);
             em.remove(n);
             et.commit();
-        } catch (ConstraintViolationException cve){
-            if(et.isActive()){
-                et.rollback();
-            }
-            System.err.println(cve.getMessage());
         }
         catch (Exception e){
             if(et != null) et.rollback();

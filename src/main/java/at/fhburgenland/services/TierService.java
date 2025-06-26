@@ -11,10 +11,6 @@ public class TierService {
 
     private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("project");
 
-    public static void run(){
-        // TODO Menu und Logik für Tier
-    }
-
     public static void create(Tier tier) {
         EntityManager em = emf.createEntityManager();
         EntityTransaction et = null;

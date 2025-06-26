@@ -10,10 +10,6 @@ import java.util.List;
 public class FuetterungsplanService {
     private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("project");
 
-    public static void run(){
-        // TODO Menu und Logik für Fuetterungsplan
-    }
-
     public static void create(Fuetterungsplan f){
         EntityManager em = emf.createEntityManager();
         EntityTransaction et = null;
@@ -51,11 +47,6 @@ public class FuetterungsplanService {
             existing.setUhrzeit(f.getUhrzeit());
             em.persist(existing);
             et.commit();
-        } catch (ConstraintViolationException cve){
-            if(et.isActive()){
-                et.rollback();
-            }
-            System.err.println(cve.getMessage());
         }
         catch (Exception e){
             if(et != null) et.rollback();

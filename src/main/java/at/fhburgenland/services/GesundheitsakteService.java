@@ -9,10 +9,6 @@ import java.util.List;
 public class GesundheitsakteService {
     private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("project");
 
-    public static void run(){
-        // TODO Menu und Logik für Gesundheitsakte
-    }
-
     public static void create(Gesundheitsakte gesAkte){
         EntityManager em = emf.createEntityManager();
         EntityTransaction et = null;

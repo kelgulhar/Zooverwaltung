@@ -10,10 +10,6 @@ import java.util.List;
 public class GehegeService {
     private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("project");
 
-    public static void run(){
-        // TODO Menu und Logik für Gehege
-    }
-
     public static void create(Gehege gehege){
         EntityManager em = emf.createEntityManager();
         EntityTransaction et = null;
@@ -66,11 +62,6 @@ public class GehegeService {
             Gehege g = em.find(Gehege.class, id);
             em.remove(g);
             et.commit();
-        } catch (ConstraintViolationException cve){
-            if(et.isActive()){
-                et.rollback();
-            }
-            System.err.println(cve.getMessage());
         }
         catch (Exception e){
             if(et != null) et.rollback();
