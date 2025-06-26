@@ -1,6 +1,8 @@
 package at.fhburgenland.entities;
 
 import jakarta.persistence.*;
+
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -18,7 +20,7 @@ public class Gesundheitsakte {
 
     @Column(nullable = false)
     @Temporal(TemporalType.DATE)
-    private Date behandlungsdatum;
+    private LocalDate behandlungsdatum;
 
     @ManyToOne
     @JoinColumn(name = "tier_id", nullable = false)
@@ -37,11 +39,11 @@ public class Gesundheitsakte {
         this.behandlungsart = behandlungsart;
     }
 
-    public Date getBehandlungsdatum() {
+    public LocalDate getBehandlungsdatum() {
         return behandlungsdatum;
     }
 
-    public void setBehandlungsdatum(Date behandlungsdatum) {
+    public void setBehandlungsdatum(LocalDate behandlungsdatum) {
         this.behandlungsdatum = behandlungsdatum;
     }
 

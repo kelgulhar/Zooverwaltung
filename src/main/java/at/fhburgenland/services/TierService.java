@@ -91,7 +91,6 @@ public class TierService {
             //update/move tier
             tier.getGehege().addTier(tier);
             t.getGehege().removeTier(t);
-
             t.setGehege(tier.getGehege());
 
             em.persist(t);

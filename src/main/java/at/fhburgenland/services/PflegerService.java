@@ -69,8 +69,7 @@ public class PflegerService {
 
 
             if(p != null){
-                p.addInventar(i);
-                i.addPfleger(p);
+
             }
 
             // TODO Logik
