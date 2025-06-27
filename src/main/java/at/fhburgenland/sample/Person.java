@@ -1,4 +1,4 @@
-package at.fhburgenland;
+package at.fhburgenland.sample;
 
 import jakarta.persistence.*;
 

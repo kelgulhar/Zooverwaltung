@@ -1,10 +1,13 @@
-package at.fhburgenland;
+package at.fhburgenland.sample;
 
 import jakarta.persistence.*;
 
-import java.sql.PreparedStatement;
 import java.util.List;
 
+/**
+ * Sample code from lecture - do not run!
+ * Persistence Unit
+ */
 public class Main {
 
     private static EntityManagerFactory EMF = Persistence.createEntityManagerFactory("project");
