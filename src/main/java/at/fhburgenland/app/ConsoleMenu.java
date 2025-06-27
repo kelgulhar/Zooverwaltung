@@ -316,7 +316,7 @@ public class ConsoleMenu {
             }
             case 2 -> {
                 int id = readInt("Pfleger-ID:");
-                System.out.println(PflegerService.find(id));
+                System.out.println(PflegerService.find(id).toString());
             }
             case 3 -> {
                 int id = readInt("Pfleger-ID:");

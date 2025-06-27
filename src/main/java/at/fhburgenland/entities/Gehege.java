@@ -11,6 +11,7 @@ public class Gehege {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="gehege_id")
     private int gehegeId;
 
     @Column(nullable = false)

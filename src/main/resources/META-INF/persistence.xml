@@ -9,6 +9,15 @@
     <persistence-unit name="project" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <class>at.fhburgenland.sample.Person</class>
+        <class>at.fhburgenland.entities.Besucher</class>
+        <class>at.fhburgenland.entities.Fuehrung</class>
+        <class>at.fhburgenland.entities.Fuetterungsplan</class>
+        <class>at.fhburgenland.entities.Gehege</class>
+        <class>at.fhburgenland.entities.Gesundheitsakte</class>
+        <class>at.fhburgenland.entities.Inventar</class>
+        <class>at.fhburgenland.entities.Nahrungsart</class>
+        <class>at.fhburgenland.entities.Pfleger</class>
+        <class>at.fhburgenland.entities.Tier</class>
         <properties>
             <!-- Driver für die Postgres database -->
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>

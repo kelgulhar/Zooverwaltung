@@ -15,6 +15,7 @@ public class Pfleger {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="pfleger_id")
     private int pflegerId;
 
     @Column(nullable = false)
@@ -208,4 +209,14 @@ public class Pfleger {
         }
     }
 
+    @Override
+    public String toString() {
+        return "Pfleger{" +
+                "gebDat=" + gebDat +
+                ", svnr='" + svnr + '\'' +
+                ", nachname='" + nachname + '\'' +
+                ", vorname='" + vorname + '\'' +
+                ", pflegerId=" + pflegerId +
+                '}';
+    }
 }
