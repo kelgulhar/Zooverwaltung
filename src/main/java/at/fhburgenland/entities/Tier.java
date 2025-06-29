@@ -12,20 +12,20 @@ public class Tier {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="tier_id", updatable = false, nullable = false)
+    @Column(name="Tier_ID", updatable = false, nullable = false)
     private int tierId;
 
-    @Column(name="tierart", length = 32)
+    @Column(name="Tierart", length = 32)
     private String tierart;
 
-    @Column(name="name", nullable = false, length = 32)
+    @Column(name="Name", nullable = false, length = 32)
     private String name;
 
-    @Column(name="alter")
+    @Column(name="Alter")
     private int alter;
 
     @ManyToOne
-    @JoinColumn(name = "gehege_id", nullable = false)
+    @JoinColumn(name = "Gehege_ID", nullable = false)
     private Gehege gehege;
 
     @OneToMany(mappedBy = "tier")

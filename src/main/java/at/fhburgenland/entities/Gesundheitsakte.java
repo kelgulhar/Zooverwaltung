@@ -13,12 +13,13 @@ public class Gesundheitsakte {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="Akte_ID")
     private int akteId;
 
-    @Column(nullable = false)
+    @Column(name="Behandlungsart", nullable = false)
     private String behandlungsart;
 
-    @Column(nullable = false)
+    @Column(name="Behandlungsdatum",nullable = false)
     @Temporal(TemporalType.DATE)
     private LocalDate behandlungsdatum;
 

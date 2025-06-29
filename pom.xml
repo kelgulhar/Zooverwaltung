@@ -28,10 +28,18 @@
             <artifactId>hibernate-core</artifactId>
             <version>7.0.0.Alpha2</version>
         </dependency>
-        <dependency>    <!-- hibernate validator für die min max Notationen -->
-            <groupId>org.hibernate.validator</groupId>
+        <!-- hibernate validator für die min max Notationen -->
+        <!-- 9.0.1 ist in Beta == NICHT BENUTZEN!!! -->
+<!--        <dependency>-->
+<!--            <groupId>org.hibernate.validator</groupId>-->
+<!--            <artifactId>hibernate-validator</artifactId>-->
+<!--            <version>9.0.1.Final</version>-->
+<!--        </dependency>-->
+        <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-validator -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
-            <version>9.0.1.Final</version>
+            <version>8.0.2.Final</version>
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
@@ -48,6 +56,12 @@
             <artifactId>annotations</artifactId>
             <version>RELEASE</version>
             <scope>compile</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.jboss.logging/jboss-logging -->
+        <dependency>
+            <groupId>org.jboss.logging</groupId>
+            <artifactId>jboss-logging</artifactId>
+            <version>3.6.1.Final</version>
         </dependency>
     </dependencies>
 </project>

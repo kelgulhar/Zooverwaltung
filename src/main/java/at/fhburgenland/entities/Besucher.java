@@ -14,13 +14,13 @@ public class Besucher {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="besucher_id", updatable = false, nullable = false)
+    @Column(name="Besucher_ID", updatable = false, nullable = false)
     private int besucherId;
 
-    @Column(name="vorname",nullable = false)
+    @Column(name="Vorname",nullable = false)
     private String vorname;
 
-    @Column(name="nachname",nullable = false)
+    @Column(name="Nachname",nullable = false)
     private String nachname;
 
     @ManyToMany
@@ -72,5 +72,14 @@ public class Besucher {
         if (besuchteFuehrungen.remove(f)) {
             f.getBesucherListe().remove(this);
         }
+    }
+
+    @Override
+    public String toString(){
+        String entity = "Besucher {";
+        String fields = "ID: " +this.besucherId+
+                ", Vorname: " +this.vorname+
+                ", Nachname:" +this.nachname+ "}";  // oder so
+        return entity + fields;
     }
 }

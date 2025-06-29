@@ -12,9 +12,10 @@ public class Inventar {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "Inventar_ID")
     private int inventarId;
 
-    @Column(nullable = false)
+    @Column(name = "Bezeichnung", nullable = false)
     private String bezeichnung;
 
     @ManyToMany(mappedBy = "inventarListe")

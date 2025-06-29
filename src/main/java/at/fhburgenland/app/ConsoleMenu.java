@@ -3,6 +3,7 @@ package at.fhburgenland.app;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Scanner;
+
 import at.fhburgenland.entities.*;
 import at.fhburgenland.entities.*;
 import at.fhburgenland.services.*;
@@ -13,36 +14,47 @@ public class ConsoleMenu {
     public ConsoleMenu() {
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         run();
     }
 
-    public static void run(){
+    public static void run() {
         while (true) {
             showMainMenu();
             int choice = readInt("Auswahl:");
             switch (choice) {
-                case 1: handleTierMenu();
+                case 1:
+                    handleTierMenu();
                     break;
-                case 2: handlePflegerMenu();
+                case 2:
+                    handlePflegerMenu();
                     break;
-                case 3: handleGehegeMenu();
+                case 3:
+                    handleGehegeMenu();
                     break;
-                case 4: handleAkteMenu();
+                case 4:
+                    handleAkteMenu();
                     break;
-                case 5: handlePlanMenu();
+                case 5:
+                    handlePlanMenu();
                     break;
-                case 6: handleFuehrungMenu();
+                case 6:
+                    handleFuehrungMenu();
                     break;
-                case 7: handleBesucherMenu();
+                case 7:
+                    handleBesucherMenu();
                     break;
-                case 8: handleNahrungMenu();
+                case 8:
+                    handleNahrungMenu();
                     break;
-                case 9: handleInventarMenu();
+                case 9:
+                    handleInventarMenu();
                     break;
-                case 0: System.out.println("Exit.");
+                case 0:
+                    System.out.println("Exit.");
                     return;
-                default: System.out.println("Ungültige Nummer.");
+                default:
+                    System.out.println("Ungültige Nummer.");
                     break;
             }
         }
@@ -84,7 +96,7 @@ public class ConsoleMenu {
     }
 
     // Handle Methoden
-    private static void handleTierMenu(){
+    private static void handleTierMenu() {
         System.out.println("\n-- Tier --");
         System.out.println("1 = Create");
         System.out.println("2 = Read");
@@ -100,10 +112,9 @@ public class ConsoleMenu {
                 t.setTierart(readStr("Tierart:"));
                 t.setAlter(readInt("Alter:"));
                 int gId = readInt("Gehege-ID:");
-                if(GehegeService.find(gId) != null) {
+                if (GehegeService.find(gId) != null) {
                     System.err.println("Abbruch: Das Gehege mit dieser Id existiert nicht");
-                }
-                else {
+                } else {
                     TierService.create(t, gId);
                 }
             }
@@ -114,44 +125,43 @@ public class ConsoleMenu {
             case 3 -> {
                 int id = readInt("Tier-ID:");
                 Tier t = TierService.find(id);
-                if(t != null) {
+                if (t != null) {
                     t.setName(readStr("Neuer Name:"));
                     t.setTierart(readStr("Neue Tierart:"));
                     t.setAlter(readInt("Neues Alter:"));
                     int gId = readInt("Neues Gehege-ID:");
-                    if(GehegeService.find(gId) != null) {
+                    if (GehegeService.find(gId) != null) {
                         System.err.println("Abbruch: Das Gehege mit dieser Id existiert nicht");
-                    }
-                    else {
+                    } else {
                         TierService.update(t);
                     }
-                }
-                else {
+                } else {
                     System.out.println("Tier mit dieser Id existieert nicht");
                 }
             }
             case 4 -> {
                 int tid = readInt("Tier-ID:");
-                if(TierService.find(tid) != null){
+                if (TierService.find(tid) != null) {
                     int pid = readInt("Pfleger-ID:");
-                    if(PflegerService.find(pid) != null){
+                    if (PflegerService.find(pid) != null) {
                         TierService.createConnectionToPfleger(tid, pid);
-                    }else{
+                    } else {
                         System.err.println("Abbruch: Pfleger mit dieser Id existiert nicht");
                     }
-                }
-                else{
+                } else {
                     System.err.println("Abbruch: Tier mit dieser Id existiert nicht");
                 }
             }
             case 5 -> TierService.delete(readInt("Tier-ID:"));
-            case 0 -> { return; }
+            case 0 -> {
+                return;
+            }
             default -> System.out.println("Ungültige Auswahl");
         }
     }
 
 
-    private static void handleGehegeMenu(){
+    private static void handleGehegeMenu() {
         System.out.println("\n-- Gehege --");
         System.out.println("1 = Create");
         System.out.println("2 = Read");
@@ -194,12 +204,14 @@ public class ConsoleMenu {
                 }
             }
             case 5 -> GehegeService.delete(readInt("Gehege-ID:"));
-            case 0 -> { return; }
+            case 0 -> {
+                return;
+            }
             default -> System.out.println("Ungültige Auswahl");
         }
     }
 
-    private static void handleAkteMenu(){
+    private static void handleAkteMenu() {
         System.out.println("\n-- Gesundheitsakte --");
         System.out.println("1 = Create");
         System.out.println("2 = Read");
@@ -213,9 +225,9 @@ public class ConsoleMenu {
                 ga.setBehandlungsart(readStr("Behandlungsart:"));
                 ga.setBehandlungsdatum(readDate("Behandlungsdatum(YYYY-MM-dd):"));
                 int tid = readInt("Tier-ID:");
-                if(TierService.find(tid) != null){
+                if (TierService.find(tid) != null) {
                     GesundheitsakteService.create(ga, tid);
-                } else{
+                } else {
                     System.err.println("Abbruch: Das Tier mit dieser Id existiert nicht");
                 }
             }
@@ -230,9 +242,9 @@ public class ConsoleMenu {
                     ga.setBehandlungsart(readStr("Neue Behandlungsart:"));
                     ga.setBehandlungsdatum(readDate("Neues Datum(YYYY-MM-dd):"));
                     int tid = readInt("Neue Tier-ID:");
-                    if(TierService.find(tid) != null){
+                    if (TierService.find(tid) != null) {
                         GesundheitsakteService.update(ga);
-                    } else{
+                    } else {
                         System.err.println("Abbruch: Das Tier mit dieser Id existiert nicht");
                     }
                 } else {
@@ -240,12 +252,14 @@ public class ConsoleMenu {
                 }
             }
             case 4 -> GesundheitsakteService.delete(readInt("Akte-ID:"));
-            case 0 -> { return; }
+            case 0 -> {
+                return;
+            }
             default -> System.out.println("Ungültige Auswahl");
         }
     }
 
-    private static void handleInventarMenu(){
+    private static void handleInventarMenu() {
         System.out.println("\n-- Inventar --");
         System.out.println("1 = Create");
         System.out.println("2 = Read");
@@ -274,12 +288,14 @@ public class ConsoleMenu {
                 }
             }
             case 4 -> InventarService.delete(readInt("Inventar-ID:"));
-            case 0 -> { return; }
+            case 0 -> {
+                return;
+            }
             default -> System.out.println("Ungültige Auswahl");
         }
     }
 
-    private static void handlePflegerMenu(){
+    private static void handlePflegerMenu() {
         System.out.println("\n-- Pfleger --");
         System.out.println("1 = Create");
         System.out.println("2 = Read");
@@ -300,7 +316,7 @@ public class ConsoleMenu {
             }
             case 2 -> {
                 int id = readInt("Pfleger-ID:");
-                System.out.println(PflegerService.find(id));
+                System.out.println(PflegerService.find(id).toString());
             }
             case 3 -> {
                 int id = readInt("Pfleger-ID:");
@@ -332,12 +348,14 @@ public class ConsoleMenu {
             case 6 -> {
                 // TODO Logik für Statistik
             }
-            case 0 -> { return; }
+            case 0 -> {
+                return;
+            }
             default -> System.out.println("Ungültige Auswahl");
         }
     }
 
-    private static void handleFuehrungMenu(){
+    private static void handleFuehrungMenu() {
         System.out.println("\n-- Führung --");
         System.out.println("1 = Create");
         System.out.println("2 = Read");
@@ -384,12 +402,14 @@ public class ConsoleMenu {
                 }
             }
             case 5 -> FuehrungService.delete(readInt("Führung-ID:"));
-            case 0 -> { return; }
+            case 0 -> {
+                return;
+            }
             default -> System.out.println("Ungültige Auswahl");
         }
     }
 
-    private static void handleBesucherMenu(){
+    private static void handleBesucherMenu() {
         System.out.println("\n-- Besucher --");
         System.out.println("1 = Create");
         System.out.println("2 = Read");
@@ -438,12 +458,14 @@ public class ConsoleMenu {
             case 6 -> {
                 // TODO implementieren
             }
-            case 0 -> { return; }
+            case 0 -> {
+                return;
+            }
             default -> System.out.println("Ungültige Auswahl");
         }
     }
 
-    private static void handleNahrungMenu(){
+    private static void handleNahrungMenu() {
         System.out.println("\n-- Nahrungsart --");
         System.out.println("1 = Create");
         System.out.println("2 = Read");
@@ -486,12 +508,14 @@ public class ConsoleMenu {
                 }
             }
             case 5 -> NahrungsartService.delete(readInt("Nahrung-ID:"));
-            case 0 -> { return; }
+            case 0 -> {
+                return;
+            }
             default -> System.out.println("Ungültige Auswahl");
         }
     }
 
-    private static void handlePlanMenu(){
+    private static void handlePlanMenu() {
         System.out.println("\n-- Fütterungsplan --");
         System.out.println("1 = Create");
         System.out.println("2 = Read");
@@ -536,7 +560,9 @@ public class ConsoleMenu {
                 }
             }
             case 5 -> FuetterungsplanService.delete(readInt("Plan-ID:"));
-            case 0 -> { return; }
+            case 0 -> {
+                return;
+            }
             default -> System.out.println("Ungültige Auswahl");
         }
     }

@@ -11,9 +11,10 @@ public class Gehege {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="Gehege_ID")
     private int gehegeId;
 
-    @Column(nullable = false)
+    @Column(name="Gehegeart",nullable = false)
     private String gehegeart;
 
     // Gehege konnte gar nicht gelöscht werden
