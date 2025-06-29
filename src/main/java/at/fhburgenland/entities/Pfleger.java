@@ -15,20 +15,20 @@ public class Pfleger {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="pfleger_id")
+    @Column(name="Pfleger_ID")
     private int pflegerId;
 
-    @Column(nullable = false)
+    @Column(name = "Vorname", nullable = false)
     private String vorname;
 
-    @Column(nullable = false)
+    @Column(name = "Nachname", nullable = false)
     private String nachname;
 
-    @Column(length = 4, nullable = false)
+    @Column(name = "SVNR", length = 4, nullable = false)
     @Pattern(regexp = "\\d{4}", message = "SVNR muss genau 4 Ziffern sein")
     private String svnr;
 
-    @Column(nullable = false)
+    @Column(name = "GebDat", nullable = false)
     private LocalDate gebDat;
 
     @ManyToMany

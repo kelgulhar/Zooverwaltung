@@ -10,9 +10,10 @@ public class Nahrungsart {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="Nahrung_ID")
     private int nahrungId;
 
-    @Column(nullable = false)
+    @Column(name = "Bezeichnung", nullable = false)
     private String bezeichnung;
 
     @ManyToMany(mappedBy = "nahrungsarten")

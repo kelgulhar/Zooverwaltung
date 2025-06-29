@@ -14,13 +14,13 @@ public class Fuetterungsplan {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="plan_id", updatable = false, nullable = false)
+    @Column(name="Plan_ID", updatable = false, nullable = false)
     private int planId;
 
-    @Column(nullable = false)
+    @Column(name = "Uhrzeit", nullable = false)
     private LocalTime uhrzeit;
 
-    @Column(nullable = false)
+    @Column(name = "Datum", nullable = false)
     private LocalDate datum;
 
     @ManyToMany(mappedBy = "fuetterungsplaene")

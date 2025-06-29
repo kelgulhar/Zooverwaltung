@@ -14,15 +14,16 @@ public class Fuehrung {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "Fuehrung_ID")
     private int fuehrungId;
 
-    @Column(nullable = false)
+    @Column(name = "Gehegeroute", nullable = false)
     private String gehegeroute;
 
-    @Column(nullable = false)
+    @Column(name = "Datum", nullable = false)
     private LocalDate datum;
 
-    @Column(nullable = false)
+    @Column(name = "Uhrzeit", nullable = false)
     private LocalTime uhrzeit;
 
     @ManyToMany(mappedBy = "fuehrungen")
