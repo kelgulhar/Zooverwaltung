@@ -1,6 +1,7 @@
 package at.fhburgenland.services;
 
 import at.fhburgenland.entities.*;
+import at.fhburgenland.util.JPAUtil;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -8,11 +9,9 @@ import java.util.List;
 
 
 public class TierService {
-
-    private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("project");
-
+    
     public static void create(Tier tier, int gehegeId) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         EntityTransaction et = null;
         try {
             et = em.getTransaction();
@@ -35,7 +34,7 @@ public class TierService {
     }
 
     public static void createConnectionToPfleger(int tierId, int pflegerId){
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         EntityTransaction et = null;
         Tier t = null;
         Pfleger p = null;
@@ -62,7 +61,7 @@ public class TierService {
     }
 
     public static Tier find(int id) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
 
         try{
             return em.find(Tier.class, id);
@@ -75,7 +74,7 @@ public class TierService {
     }
 
     public static void update(Tier tier) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         EntityTransaction et = null;
         Tier t = null;
 
@@ -106,7 +105,7 @@ public class TierService {
     }
 
     public static void delete(int id) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         EntityTransaction et = null;
         Tier t = null;
 
@@ -137,7 +136,7 @@ public class TierService {
     }
 
     public static List<Tier> findAll() {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         String query = "SELECT t FROM Tier t";
         TypedQuery<Tier> tq = em.createQuery(query, Tier.class);
 

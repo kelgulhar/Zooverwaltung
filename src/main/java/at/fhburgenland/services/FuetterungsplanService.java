@@ -1,6 +1,7 @@
 package at.fhburgenland.services;
 
 import at.fhburgenland.entities.*;
+import at.fhburgenland.util.JPAUtil;
 import jakarta.persistence.*;
 import jakarta.validation.ConstraintViolationException;
 
@@ -8,10 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FuetterungsplanService {
-    private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("project");
-
+    
     public static void create(Fuetterungsplan f){
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         EntityTransaction et = null;
         try {
             et = em.getTransaction();
@@ -27,7 +27,7 @@ public class FuetterungsplanService {
     }
 
     public static void createConnectionToPfleger(int fuetterungId, int pflegerId){
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         EntityTransaction et = null;
         Pfleger p = null;
         Fuetterungsplan f = null;
@@ -54,7 +54,7 @@ public class FuetterungsplanService {
     }
 
     public static Fuetterungsplan find(int id){
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         try{
             return em.find(Fuetterungsplan.class, id);
         } catch(Exception e){
@@ -66,7 +66,7 @@ public class FuetterungsplanService {
     }
 
     public static void update(Fuetterungsplan f){
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         EntityTransaction et = null;
         try{
             et = em.getTransaction(); et.begin();
@@ -85,7 +85,7 @@ public class FuetterungsplanService {
     }
 
     public static void delete(int id){
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         EntityTransaction et = null;
         try{
             et = em.getTransaction();
@@ -106,7 +106,7 @@ public class FuetterungsplanService {
     }
 
     public static List<Fuetterungsplan> findAll(){
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         String q = "SELECT f FROM Fuetterungsplan f";
         TypedQuery<Fuetterungsplan> tq = em.createQuery(q, Fuetterungsplan.class);
         try{

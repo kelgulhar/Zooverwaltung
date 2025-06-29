@@ -1,6 +1,7 @@
 package at.fhburgenland.services;
 
 import at.fhburgenland.entities.*;
+import at.fhburgenland.util.JPAUtil;
 import jakarta.persistence.*;
 import jakarta.validation.ConstraintViolationException;
 
@@ -8,10 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NahrungsartService {
-    private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("project");
-
+    
     public static void create(Nahrungsart n){
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         EntityTransaction et = null;
         try {
             et = em.getTransaction();
@@ -27,7 +27,7 @@ public class NahrungsartService {
     }
 
     public static void createConnectionToFuetterung(int nahrungId, int fuetterungId){
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         EntityTransaction et = null;
         Nahrungsart n = null;
         Fuetterungsplan f = null;
@@ -54,7 +54,7 @@ public class NahrungsartService {
     }
 
     public static Nahrungsart find(int id){
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         try{
             return em.find(Nahrungsart.class, id);
         } catch(Exception e){
@@ -66,7 +66,7 @@ public class NahrungsartService {
     }
 
     public static void update(Nahrungsart n){
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         EntityTransaction et = null;
         try{
             et = em.getTransaction(); et.begin();
@@ -84,7 +84,7 @@ public class NahrungsartService {
     }
 
     public static void delete(int id){
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         EntityTransaction et = null;
         try{
             et = em.getTransaction(); et.begin();
@@ -106,7 +106,7 @@ public class NahrungsartService {
     }
 
     public static List<Nahrungsart> findAll(){
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         String q = "SELECT n FROM Nahrungsart n";
         TypedQuery<Nahrungsart> tq = em.createQuery(q, Nahrungsart.class);
         try{

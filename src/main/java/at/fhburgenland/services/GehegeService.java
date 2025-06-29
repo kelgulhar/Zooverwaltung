@@ -4,6 +4,7 @@ import at.fhburgenland.entities.Besucher;
 import at.fhburgenland.entities.Fuehrung;
 import at.fhburgenland.entities.Gehege;
 import at.fhburgenland.entities.Pfleger;
+import at.fhburgenland.util.JPAUtil;
 import jakarta.persistence.*;
 import jakarta.validation.ConstraintViolationException;
 
@@ -11,10 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GehegeService {
-    private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("project");
-
+    
     public static void create(Gehege gehege){
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         EntityTransaction et = null;
         try {
             et = em.getTransaction(); et.begin();
@@ -29,7 +29,7 @@ public class GehegeService {
     }
 
     public static void createConnectionToPfleger(int gehegeId, int pflegerId){
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         EntityTransaction et = null;
         Gehege g = null;
         Pfleger p = null;
@@ -56,7 +56,7 @@ public class GehegeService {
     }
 
     public static Gehege find(int id){
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         try{
             return em.find(Gehege.class, id);
         } catch(Exception e){
@@ -68,7 +68,7 @@ public class GehegeService {
     }
 
     public static void update(Gehege g){
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         EntityTransaction et = null;
         try{
             et = em.getTransaction(); et.begin();
@@ -85,7 +85,7 @@ public class GehegeService {
     }
 
     public static void delete(int id){
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         EntityTransaction et = null;
         try{
             et = em.getTransaction(); et.begin();
@@ -105,7 +105,7 @@ public class GehegeService {
     }
 
     public static List<Gehege> findAll(){
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         String q = "SELECT g FROM Gehege g";
         TypedQuery<Gehege> tq = em.createQuery(q, Gehege.class);
         try{

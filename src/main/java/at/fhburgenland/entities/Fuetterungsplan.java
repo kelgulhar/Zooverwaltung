@@ -10,11 +10,13 @@ import java.util.List;
 @Entity(name = "Fuetterungsplan")
 @Table(name = "fuetterungsplan")
 public class Fuetterungsplan {
-    public Fuetterungsplan(){}
+
+    public Fuetterungsplan() {
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="Plan_ID", updatable = false, nullable = false)
+    @Column(name = "Plan_ID", updatable = false, nullable = false)
     private int planId;
 
     @Column(name = "Uhrzeit", nullable = false)
@@ -23,13 +25,13 @@ public class Fuetterungsplan {
     @Column(name = "Datum", nullable = false)
     private LocalDate datum;
 
-    @ManyToMany(mappedBy = "fuetterungsplaene")
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "fuetterungsplaene")
     private List<Pfleger> pflegerListe;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "Fuetterungsplan_Nahrungsart",
-        joinColumns = @JoinColumn(name = "plan_id"),
-        inverseJoinColumns = @JoinColumn(name = "nahrung_id"))
+            joinColumns = @JoinColumn(name = "plan_id"),
+            inverseJoinColumns = @JoinColumn(name = "nahrung_id"))
     private List<Nahrungsart> nahrungsarten;
 
     // Getter und Setter
@@ -97,4 +99,14 @@ public class Fuetterungsplan {
         }
     }
 
+    @Override
+    public String toString() {
+        return "Fuetterungsplan{" +
+                "planId=" + planId +
+                ", uhrzeit=" + uhrzeit +
+                ", datum=" + datum +
+                ", pflegerListe=" + pflegerListe +
+                ", nahrungsarten=" + nahrungsarten +
+                '}';
+    }
 }

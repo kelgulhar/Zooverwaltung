@@ -1,16 +1,19 @@
 package at.fhburgenland.entities;
 
 import jakarta.persistence.*;
+
 import java.util.List;
 
-@Entity
+@Entity(name = "Nahrungsart")
+@Table(name = "nahrungsart")
 public class Nahrungsart {
-    public Nahrungsart(){
+
+    public Nahrungsart() {
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="Nahrung_ID")
+    @Column(name = "Nahrung_ID")
     private int nahrungId;
 
     @Column(name = "Bezeichnung", nullable = false)
@@ -22,7 +25,7 @@ public class Nahrungsart {
 
     // Getter und Setter
 
-    public int getNahrungId(){
+    public int getNahrungId() {
         return this.nahrungId;
     }
 
@@ -56,4 +59,11 @@ public class Nahrungsart {
         }
     }
 
+    @Override
+    public String toString() {
+        return "Nahrungsart{" +
+                "nahrungId=" + nahrungId +
+                ", bezeichnung='" + bezeichnung + '\'' +
+                '}';
+    }
 }

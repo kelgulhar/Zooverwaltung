@@ -5,9 +5,11 @@ import jakarta.validation.constraints.Size;
 
 import java.util.List;
 
-@Entity
+@Entity(name = "Inventar")
+@Table(name = "inventar")
 public class Inventar {
-    public Inventar(){
+
+    public Inventar() {
     }
 
     @Id
@@ -18,7 +20,7 @@ public class Inventar {
     @Column(name = "Bezeichnung", nullable = false)
     private String bezeichnung;
 
-    @ManyToMany(mappedBy = "inventarListe")
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "inventarListe")
     private List<Pfleger> verwalter;
 
     // Getter und Setter
@@ -58,4 +60,12 @@ public class Inventar {
         }
     }
 
+    @Override
+    public String toString() {
+        return "Inventar{" +
+                "inventarId=" + inventarId +
+                ", bezeichnung='" + bezeichnung + '\'' +
+                ", verwalter=" + verwalter +
+                '}';
+    }
 }

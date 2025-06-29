@@ -1,93 +1,60 @@
-//package at.fhburgenland.menu;
-//
-//import at.fhburgenland.entities.Gesundheitsakte;
-//import at.fhburgenland.entities.Tier;
-//import at.fhburgenland.services.GesundheitsakteService;
-//
-//import java.time.LocalDate;
-//import java.util.Scanner;
-//
-//public class GesundheitsakteMenu {
-//    private final GesundheitsakteService service;
-//    private final Scanner scanner;
-//
-//    public GesundheitsakteMenu(GesundheitsakteService service, Scanner scanner) {
-//        this.service = service;
-//        this.scanner = scanner;
-//    }
-//
-//    public void show() {
-//        boolean back = false;
-//
-//        while (!back) {
-//            System.out.println("""
-//                1 - Gesundheitsakte anlegen
-//                2 - Gesundheitsakte lesen
-//                3 - Gesundheitsakte bearbeiten
-//                4 - Gesundheitsakte löschen
-//                5 - Alle Gesundheitsaktes anzeigen
-//                0 - Zurück
-//            """);
-//            String input = scanner.nextLine();
-//            switch (input) {
-//                case "1" -> create();
-//                case "2" -> read();
-//                case "3" -> update();
-//                case "4" -> delete();
-//                case "5" -> listAll();
-//                case "0" -> back = true;
-//                default -> System.out.println("Ungültige Eingabe!");
-//            }
-//        }
-//    }
-//
-//    private void create() {
-//        try {
-//            System.out.println("Behandlungsart:");
-//            String behandlungsart = scanner.nextLine();
-//
-//            System.out.println("Behandlungsdatum (yyyy-mm-dd):");
-//            LocalDate datum = LocalDate.parse(scanner.nextLine());
-//
-//            System.out.println("Tier-ID:");
-//            int tierId = Integer.parseInt(scanner.nextLine());
-//
-//            Gesundheitsakte ga = new Gesundheitsakte();
-//            ga.setBehandlungsart(behandlungsart);
-//            ga.setBehandlungsdatum(Date.valueOf(datum));
-//            Tier tier = new Tier();
-//            tier.setTierId(tierId); // Annahme: nur ID reicht (oder fetch über service)
-//            ga.setTier(tier);
-//
-//            service.addGesundheitsakte(ga);
-//        } catch (Exception e) {
-//            System.out.println("Fehler bei der Eingabe: " + e.getMessage());
-//        }
-//    }
-//
-//    private void read() {
-//        System.out.println("ID eingeben:");
-//        int id = Integer.parseInt(scanner.nextLine());
-//        Gesundheitsakte obj = service.getGesundheitsakte(id);
-//        if (obj != null) {
-//            System.out.println(obj);
-//        } else {
-//            System.out.println("Gesundheitsakte nicht gefunden.");
-//        }
-//    }
-//
-//    private void update() {
-//        System.out.println("TODO: Gesundheitsakte bearbeiten");
-//        // Eingabe ID + neue Felder
-//    }
-//
-//    private void delete() {
-//        System.out.println("ID eingeben:");
-//        int id = Integer.parseInt(scanner.nextLine());
-//        service.deleteGesundheitsakte(id);
-//    }
-//
-//    private void listAll() {
-//        service.getAllGesundheitsaktes().forEach(System.out::println);
-//    }
-//}
+package at.fhburgenland.menu;
+
+import at.fhburgenland.entities.Gesundheitsakte;
+import at.fhburgenland.services.GesundheitsakteService;
+import at.fhburgenland.services.TierService;
+import at.fhburgenland.util.Helper;
+
+public class GesundheitsakteMenu {
+    public GesundheitsakteMenu() {
+
+    }
+
+    public void run() {
+        System.out.println("\n-- Gesundheitsakte --");
+        System.out.println("1 = Create");
+        System.out.println("2 = Read");
+        System.out.println("3 = Update");
+        System.out.println("4 = Delete");
+        System.out.println("0 = Back");
+        int choice = Helper.readInt("Auswahl:");
+        switch (choice) {
+            case 1 -> {
+                Gesundheitsakte ga = new Gesundheitsakte();
+                ga.setBehandlungsart(Helper.readStr("Behandlungsart:"));
+                ga.setBehandlungsdatum(Helper.readDate("Behandlungsdatum(DD.MM.YYYY):"));
+                int tid = Helper.readInt("Tier-ID:");
+                if (TierService.find(tid) != null) {
+                    GesundheitsakteService.create(ga, tid);
+                } else {
+                    System.err.println("Abbruch: Das Tier mit dieser Id existiert nicht");
+                }
+            }
+            case 2 -> {
+                int id = Helper.readInt("Akte-ID:");
+                System.out.println(GesundheitsakteService.find(id));
+            }
+            case 3 -> {
+                int id = Helper.readInt("Akte-ID:");
+                Gesundheitsakte ga = GesundheitsakteService.find(id);
+                if (ga != null) {
+                    ga.setBehandlungsart(Helper.readStr("Neue Behandlungsart:"));
+                    ga.setBehandlungsdatum(Helper.readDate("Neues Datum(DD.MM.YYYY):"));
+                    int tid = Helper.readInt("Neue Tier-ID:");
+                    if (TierService.find(tid) != null) {
+                        GesundheitsakteService.update(ga);
+                    } else {
+                        System.err.println("Abbruch: Das Tier mit dieser Id existiert nicht");
+                    }
+                } else {
+                    System.err.println("Abbruch: Gesundheitsakte mit dieser Id existiert nicht");
+                }
+            }
+            case 4 -> GesundheitsakteService.delete(Helper.readInt("Akte-ID:"));
+            case 0 -> {
+                return;
+            }
+            default -> System.out.println("Ungültige Auswahl");
+        }
+    }
+}

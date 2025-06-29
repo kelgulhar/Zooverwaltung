@@ -1,6 +1,7 @@
 package at.fhburgenland.services;
 
 import at.fhburgenland.entities.Pfleger;
+import at.fhburgenland.util.JPAUtil;
 import jakarta.persistence.*;
 import jakarta.validation.ConstraintViolationException;
 
@@ -9,11 +10,10 @@ import java.util.List;
 import at.fhburgenland.entities.*;
 
 public class PflegerService {
-    private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("project");
-
+    
     public static void create(Pfleger p)
     {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         EntityTransaction et = null;
         try {
             et = em.getTransaction();
@@ -30,7 +30,7 @@ public class PflegerService {
 
     // Create connection to Fuehrung
     public static void createConnectionToInventar(int pflegerId, int invId){
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         EntityTransaction et = null;
         Pfleger p = null;
         Inventar i = null;
@@ -57,7 +57,7 @@ public class PflegerService {
     }
 
     public static String getStatistics(int pflegerId){
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         EntityTransaction et = null;
         Pfleger p = null;
         Inventar i = null;
@@ -86,7 +86,7 @@ public class PflegerService {
     }
 
     public static Pfleger find(int id){
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         try{
             return em.find(Pfleger.class, id);
         } catch(Exception e){
@@ -98,7 +98,7 @@ public class PflegerService {
     }
 
     public static void update(Pfleger p){
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         EntityTransaction et = null;
         try{
             et = em.getTransaction();
@@ -120,7 +120,7 @@ public class PflegerService {
     }
 
     public static void delete(int id){
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         EntityTransaction et = null;
         try{
             et = em.getTransaction();
@@ -146,7 +146,7 @@ public class PflegerService {
     }
 
     public static List<Pfleger> findAll(){
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         String q = "SELECT p FROM Pfleger p";
         TypedQuery<Pfleger> tq = em.createQuery(q, Pfleger.class);
         try{

@@ -1,71 +1,62 @@
-//package at.fhburgenland.menu;
-//
-//import at.fhburgenland.services.GehegeService;
-//
-//import java.util.Scanner;
-//
-//public class GehegeMenu {
-//    private final GehegeService service;
-//    private final Scanner scanner;
-//
-//    public GehegeMenu(GehegeService service, Scanner scanner) {
-//        this.service = service;
-//        this.scanner = scanner;
-//    }
-//
-//    public void show() {
-//        boolean back = false;
-//
-//        while (!back) {
-//            System.out.println("""
-//                1 - Gehege anlegen
-//                2 - Gehege lesen
-//                3 - Gehege bearbeiten
-//                4 - Gehege löschen
-//                5 - Alle Geheges anzeigen
-//                0 - Zurück
-//            """);
-//            String input = scanner.nextLine();
-//            switch (input) {
-//                case "1" -> create();
-//                case "2" -> read();
-//                case "3" -> update();
-//                case "4" -> delete();
-//                case "5" -> listAll();
-//                case "0" -> back = true;
-//                default -> System.out.println("Ungültige Eingabe!");
-//            }
-//        }
-//    }
-//
-//    private void create() {
-//        System.out.println("TODO: Gehege anlegen");
-//        // Beispielhafte Eingabeaufforderung
-//    }
-//
-//    private void read() {
-//        System.out.println("ID eingeben:");
-//        int id = Integer.parseInt(scanner.nextLine());
-//        Gehege obj = service.getGehege(id);
-//        if (obj != null) {
-//            System.out.println(obj);
-//        } else {
-//            System.out.println("Gehege nicht gefunden.");
-//        }
-//    }
-//
-//    private void update() {
-//        System.out.println("TODO: Gehege bearbeiten");
-//        // Eingabe ID + neue Felder
-//    }
-//
-//    private void delete() {
-//        System.out.println("ID eingeben:");
-//        int id = Integer.parseInt(scanner.nextLine());
-//        service.deleteGehege(id);
-//    }
-//
-//    private void listAll() {
-//        service.getAllGeheges().forEach(System.out::println);
-//    }
-//}
+package at.fhburgenland.menu;
+
+import at.fhburgenland.entities.Gehege;
+import at.fhburgenland.services.GehegeService;
+import at.fhburgenland.services.PflegerService;
+import at.fhburgenland.util.Helper;
+
+public class GehegeMenu {
+    public GehegeMenu() {
+
+    }
+
+    public void run() {
+        System.out.println("\n-- Gehege --");
+        System.out.println("1 = Create");
+        System.out.println("2 = Read");
+        System.out.println("3 = Update");
+        System.out.println("4 = Add reinigender Pfleger");
+        System.out.println("5 = Delete");
+        System.out.println("0 = Back");
+        int choice = Helper.readInt("Auswahl:");
+        switch (choice) {
+            case 1 -> {
+                Gehege g = new Gehege();
+                g.setGehegeart(Helper.readStr("Gehegeart:"));
+                GehegeService.create(g);
+            }
+            case 2 -> {
+                int id = Helper.readInt("Gehege-ID:");
+                System.out.println(GehegeService.find(id));
+            }
+            case 3 -> {
+                int id = Helper.readInt("Gehege-ID:");
+                Gehege g = GehegeService.find(id);
+                if (g != null) {
+                    g.setGehegeart(Helper.readStr("Neue Gehegeart:"));
+                    GehegeService.update(g);
+                } else {
+                    System.err.println("Abbruch: Gehege mit dieser Id existiert nicht");
+                }
+            }
+            case 4 -> {
+                int gId = Helper.readInt("Gehege-ID:");
+                if (GehegeService.find(gId) != null) {
+                    int pid = Helper.readInt("Pfleger-ID:");
+                    if (PflegerService.find(pid) != null) {
+                        GehegeService.createConnectionToPfleger(gId, pid);
+                    } else {
+                        System.err.println("Abbruch: Pfleger mit dieser Id existiert nicht");
+                    }
+                } else {
+                    System.err.println("Abbruch: Gehege mit dieser Id existiert nicht");
+                }
+            }
+            case 5 -> GehegeService.delete(Helper.readInt("Gehege-ID:"));
+            case 0 -> {
+                return;
+            }
+            default -> System.out.println("Ungültige Auswahl");
+        }
+    }
+}

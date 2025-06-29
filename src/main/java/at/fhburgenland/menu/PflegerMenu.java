@@ -1,91 +1,72 @@
-//package at.fhburgenland.menu;
-//
-//import at.fhburgenland.entities.Pfleger;
-//import at.fhburgenland.services.PflegerService;
-//
-//import java.util.Scanner;
-//
-//public class PflegerMenu {
-//    private final PflegerService service;
-//    private final Scanner scanner;
-//
-//    public PflegerMenu(PflegerService service, Scanner scanner) {
-//        this.service = service;
-//        this.scanner = scanner;
-//    }
-//
-//    public void show() {
-//        boolean back = false;
-//
-//        while (!back) {
-//            System.out.println("""
-//                        1 - Pfleger anlegen
-//                        2 - Pfleger lesen
-//                        3 - Pfleger bearbeiten
-//                        4 - Pfleger löschen
-//                        5 - Alle Pflegers anzeigen
-//                        0 - Zurück
-//                    """);
-//            String input = scanner.nextLine();
-//            switch (input) {
-//                case "1" -> create();
-//                case "2" -> read();
-//                case "3" -> update();
-//                case "4" -> delete();
-//                case "5" -> listAll();
-//                case "0" -> back = true;
-//                default -> System.out.println("Ungültige Eingabe!");
-//            }
-//        }
-//    }
-//
-//    private void create() {
-//        try {
-//            System.out.println("Vorname:");
-//            String vorname = scanner.nextLine();
-//
-//            System.out.println("Nachname:");
-//            String nachname = scanner.nextLine();
-//
-//            System.out.println("SVNR (4-stellig):");
-//            String svnr = scanner.nextLine();
-//
-//            Pfleger p = new Pfleger();
-//            p.setVorname(vorname);
-//            p.setNachname(nachname);
-//            p.setSvnr(svnr);
-//
-//            service.addPfleger(p);
-//        } catch (Exception e) {
-//            System.out.println("Fehler bei der Eingabe: " + e.getMessage());
-//        }
-//    }
-//    // Beispielhafte Eingabeaufforderung
-//
-//
-//    private void read() {
-//        System.out.println("ID eingeben:");
-//        int id = Integer.parseInt(scanner.nextLine());
-//        Pfleger obj = service.getPfleger(id);
-//        if (obj != null) {
-//            System.out.println(obj);
-//        } else {
-//            System.out.println("Pfleger nicht gefunden.");
-//        }
-//    }
-//
-//    private void update() {
-//        System.out.println("TODO: Pfleger bearbeiten");
-//        // Eingabe ID + neue Felder
-//    }
-//
-//    private void delete() {
-//        System.out.println("ID eingeben:");
-//        int id = Integer.parseInt(scanner.nextLine());
-//        service.deletePfleger(id);
-//    }
-//
-//    private void listAll() {
-//        service.getAllPflegers().forEach(System.out::println);
-//    }
-//}
+package at.fhburgenland.menu;
+
+import at.fhburgenland.entities.Pfleger;
+import at.fhburgenland.services.InventarService;
+import at.fhburgenland.services.PflegerService;
+import at.fhburgenland.util.Helper;
+
+public class PflegerMenu {
+    public PflegerMenu() {
+
+    }
+
+    public void run() {
+        System.out.println("\n-- Pfleger --");
+        System.out.println("1 = Create");
+        System.out.println("2 = Read");
+        System.out.println("3 = Update");
+        System.out.println("4 = Add verwaltendes Inventaritem");
+        System.out.println("5 = Delete");
+        System.out.println("6 = Read Statistik");
+        System.out.println("0 = Back");
+        int choice = Helper.readInt("Auswahl:");
+        switch (choice) {
+            case 1 -> {
+                Pfleger p = new Pfleger();
+                p.setVorname(Helper.readStr("Vorname:"));
+                p.setNachname(Helper.readStr("Nachname:"));
+                p.setSvnr(Helper.readStr("SVNR:"));
+                p.setGebDat(Helper.readDate("Geburtsdatum(DD.MM.YYYY):"));
+                PflegerService.create(p);
+            }
+            case 2 -> {
+                int id = Helper.readInt("Pfleger-ID:");
+                System.out.println(PflegerService.find(id));
+            }
+            case 3 -> {
+                int id = Helper.readInt("Pfleger-ID:");
+                Pfleger p = PflegerService.find(id);
+                if (p != null) {
+                    p.setVorname(Helper.readStr("Neuer Vorname:"));
+                    p.setNachname(Helper.readStr("Neuer Nachname:"));
+                    p.setSvnr(Helper.readStr("Neue SVNR:"));
+                    p.setGebDat(Helper.readDate("Neues Geburtsdatum(DD.MM.YYYY):"));
+                    PflegerService.update(p);
+                } else {
+                    System.err.println("Abbruch: Pfleger mit dieser Id existiert nicht");
+                }
+            }
+            case 4 -> {
+                int pid = Helper.readInt("Pfleger-ID:");
+                if (PflegerService.find(pid) != null) {
+                    int invId = Helper.readInt("Inventaritem-ID:");
+                    if (InventarService.find(invId) != null) {
+                        PflegerService.createConnectionToInventar(pid, invId);
+                    } else {
+                        System.err.println("Abbruch: Inventaritem mit dieser Id existiert nicht");
+                    }
+                } else {
+                    System.err.println("Abbruch: Pfleger mit dieser Id existiert nicht");
+                }
+            }
+            case 5 -> PflegerService.delete(Helper.readInt("Pfleger-ID:"));
+            case 6 -> {
+                // TODO Logik für Statistik
+            }
+            case 0 -> {
+                return;
+            }
+            default -> System.out.println("Ungültige Auswahl");
+        }
+    }
+}

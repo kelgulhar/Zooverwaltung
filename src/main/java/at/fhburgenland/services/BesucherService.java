@@ -1,6 +1,7 @@
 package at.fhburgenland.services;
 
 import at.fhburgenland.entities.*;
+import at.fhburgenland.util.JPAUtil;
 import jakarta.persistence.*;
 import jakarta.validation.ConstraintViolationException;
 
@@ -8,10 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BesucherService {
-    private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("project");
 
     public static void create(Besucher b) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         EntityTransaction et = null;
         try {
             et = em.getTransaction();
@@ -27,7 +27,7 @@ public class BesucherService {
     }
 
     public static void createConnectionToFuehrung(int besucherId, int fuehrungId){
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         EntityTransaction et = null;
         Besucher b = null;
         Fuehrung f = null;
@@ -54,7 +54,7 @@ public class BesucherService {
     }
 
     public static String getBesuchteFührungen(int besucherId){
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         EntityTransaction et = null;
         Besucher b = null;
         int besuchteFuehrungen = 0;
@@ -83,7 +83,7 @@ public class BesucherService {
     }
 
     public static Besucher find(int id) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         try {
             return em.find(Besucher.class, id);
         } catch (Exception e) {
@@ -95,7 +95,7 @@ public class BesucherService {
     }
 
     public static void update(Besucher b) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         EntityTransaction et = null;
         try {
             et = em.getTransaction();
@@ -114,7 +114,7 @@ public class BesucherService {
     }
 
     public static void delete(int id) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         EntityTransaction et = null;
         try {
             et = em.getTransaction();
@@ -136,7 +136,7 @@ public class BesucherService {
     }
 
     public static List<Besucher> findAll() {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         String q = "SELECT b FROM Besucher b";
         TypedQuery<Besucher> tq = em.createQuery(q, Besucher.class);
         try {

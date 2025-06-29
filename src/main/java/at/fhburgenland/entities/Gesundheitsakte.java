@@ -1,34 +1,35 @@
 package at.fhburgenland.entities;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Fetch;
 
 import java.time.LocalDate;
 import java.util.Date;
 
-@Entity
+@Entity(name = "Gesundheitsakte")
+@Table(name = "gesundheitsakte")
 public class Gesundheitsakte {
 
-    public Gesundheitsakte(){
+    public Gesundheitsakte() {
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="Akte_ID")
+    @Column(name = "Akte_ID")
     private int akteId;
 
-    @Column(name="Behandlungsart", nullable = false)
+    @Column(name = "Behandlungsart", nullable = false)
     private String behandlungsart;
 
-    @Column(name="Behandlungsdatum",nullable = false)
-    @Temporal(TemporalType.DATE)
+    @Column(name = "Behandlungsdatum", nullable = false)
     private LocalDate behandlungsdatum;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "tier_id", nullable = false)
     private Tier tier;
 
     // Getter und Setter
-    public int getAkteId(){
+    public int getAkteId() {
         return this.akteId;
     }
 
@@ -64,4 +65,13 @@ public class Gesundheitsakte {
         }
     }
 
+    @Override
+    public String toString() {
+        return "Gesundheitsakte{" +
+                "akteId=" + akteId +
+                ", behandlungsart='" + behandlungsart + '\'' +
+                ", behandlungsdatum=" + behandlungsdatum +
+                ", tier=" + tier +
+                '}';
+    }
 }

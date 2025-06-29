@@ -7,7 +7,8 @@ import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.List;
 
-@Entity
+@Entity(name="Pfleger")
+@Table(name="pfleger")
 public class Pfleger {
 
     public Pfleger(){
@@ -212,11 +213,11 @@ public class Pfleger {
     @Override
     public String toString() {
         return "Pfleger{" +
-                "gebDat=" + gebDat +
-                ", svnr='" + svnr + '\'' +
-                ", nachname='" + nachname + '\'' +
+                "pflegerId=" + pflegerId +
                 ", vorname='" + vorname + '\'' +
-                ", pflegerId=" + pflegerId +
+                ", nachname='" + nachname + '\'' +
+                ", svnr='" + svnr + '\'' +
+                ", gebDat=" + gebDat +
                 '}';
     }
 }

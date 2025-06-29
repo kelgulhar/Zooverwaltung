@@ -1,72 +1,47 @@
-//package at.fhburgenland.menu;
-//
-//import at.fhburgenland.entities.Inventar;
-//import at.fhburgenland.services.InventarService;
-//
-//import java.util.Scanner;
-//
-//public class InventarMenu {
-//    private final InventarService service;
-//    private final Scanner scanner;
-//
-//    public InventarMenu(InventarService service, Scanner scanner) {
-//        this.service = service;
-//        this.scanner = scanner;
-//    }
-//
-//    public void show() {
-//        boolean back = false;
-//
-//        while (!back) {
-//            System.out.println("""
-//                1 - Inventar anlegen
-//                2 - Inventar lesen
-//                3 - Inventar bearbeiten
-//                4 - Inventar löschen
-//                5 - Alle Inventars anzeigen
-//                0 - Zurück
-//            """);
-//            String input = scanner.nextLine();
-//            switch (input) {
-//                case "1" -> create();
-//                case "2" -> read();
-//                case "3" -> update();
-//                case "4" -> delete();
-//                case "5" -> listAll();
-//                case "0" -> back = true;
-//                default -> System.out.println("Ungültige Eingabe!");
-//            }
-//        }
-//    }
-//
-//    private void create() {
-//        System.out.println("TODO: Inventar anlegen");
-//        // Beispielhafte Eingabeaufforderung
-//    }
-//
-//    private void read() {
-//        System.out.println("ID eingeben:");
-//        int id = Integer.parseInt(scanner.nextLine());
-//        Inventar obj = service.getInventar(id);
-//        if (obj != null) {
-//            System.out.println(obj);
-//        } else {
-//            System.out.println("Inventar nicht gefunden.");
-//        }
-//    }
-//
-//    private void update() {
-//        System.out.println("TODO: Inventar bearbeiten");
-//        // Eingabe ID + neue Felder
-//    }
-//
-//    private void delete() {
-//        System.out.println("ID eingeben:");
-//        int id = Integer.parseInt(scanner.nextLine());
-//        service.deleteInventar(id);
-//    }
-//
-//    private void listAll() {
-//        service.getAllInventars().forEach(System.out::println);
-//    }
-//}
+package at.fhburgenland.menu;
+
+import at.fhburgenland.entities.Inventar;
+import at.fhburgenland.services.InventarService;
+import at.fhburgenland.util.Helper;
+
+public class InventarMenu {
+    public InventarMenu() {
+
+    }
+
+    public void run() {
+        System.out.println("\n-- Inventar --");
+        System.out.println("1 = Create");
+        System.out.println("2 = Read");
+        System.out.println("3 = Update");
+        System.out.println("4 = Delete");
+        System.out.println("0 = Back");
+        int choice = Helper.readInt("Auswahl:");
+        switch (choice) {
+            case 1 -> {
+                Inventar i = new Inventar();
+                i.setBezeichnung(Helper.readStr("Bezeichnung:"));
+                InventarService.create(i);
+            }
+            case 2 -> {
+                int id = Helper.readInt("Inventar-ID:");
+                System.out.println(InventarService.find(id));
+            }
+            case 3 -> {
+                int id = Helper.readInt("Inventar-ID:");
+                Inventar i = InventarService.find(id);
+                if (i != null) {
+                    i.setBezeichnung(Helper.readStr("Neue Bezeichnung:"));
+                    InventarService.update(i);
+                } else {
+                    System.err.println("Abbruch: Inventar mit dieser Id existiert nicht");
+                }
+            }
+            case 4 -> InventarService.delete(Helper.readInt("Inventar-ID:"));
+            case 0 -> {
+                return;
+            }
+            default -> System.out.println("Ungültige Auswahl");
+        }
+    }
+}

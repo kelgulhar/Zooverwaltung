@@ -2,16 +2,16 @@ package at.fhburgenland.services;
 
 import at.fhburgenland.entities.Gesundheitsakte;
 import at.fhburgenland.entities.Tier;
+import at.fhburgenland.util.JPAUtil;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class GesundheitsakteService {
-    private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("project");
-
+    
     public static void create(Gesundheitsakte gesAkte, int tierId){
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         EntityTransaction et = null;
         try {
             et = em.getTransaction();
@@ -32,7 +32,7 @@ public class GesundheitsakteService {
     }
 
     public static Gesundheitsakte find(int id){
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
 
         try{
             return em.find(Gesundheitsakte.class, id);
@@ -45,7 +45,7 @@ public class GesundheitsakteService {
     }
 
     public static void update(Gesundheitsakte gAkte){
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         EntityTransaction et = null;
         Gesundheitsakte g = null;
 
@@ -71,7 +71,7 @@ public class GesundheitsakteService {
     }
 
     public static void delete(int id){
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         EntityTransaction et = null;
         Gesundheitsakte g = null;
 
@@ -100,7 +100,7 @@ public class GesundheitsakteService {
     }
 
     public static List<Gesundheitsakte> findALl(){
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         String query = "SELECT g FROM Gesundheitsakte g";
         TypedQuery<Gesundheitsakte> tq = em.createQuery(query, Gesundheitsakte.class);
 

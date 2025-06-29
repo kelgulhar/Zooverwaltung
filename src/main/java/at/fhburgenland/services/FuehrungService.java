@@ -1,6 +1,7 @@
 package at.fhburgenland.services;
 
 import at.fhburgenland.entities.*;
+import at.fhburgenland.util.JPAUtil;
 import jakarta.persistence.*;
 import jakarta.validation.ConstraintViolationException;
 
@@ -8,10 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FuehrungService {
-    private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("project");
-
+    
     public static void create(Fuehrung f){
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         EntityTransaction et = null;
         try {
             et = em.getTransaction();
@@ -27,7 +27,7 @@ public class FuehrungService {
     }
 
     public static void createConnectionToPfleger(int fuehrungId, int pflegerId){
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         EntityTransaction et = null;
         Fuehrung f = null;
         Pfleger p = null;
@@ -54,7 +54,7 @@ public class FuehrungService {
     }
 
     public static Fuehrung find(int id){
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         try{
             return em.find(Fuehrung.class, id);
         } catch(Exception e){
@@ -66,7 +66,7 @@ public class FuehrungService {
     }
 
     public static void update(Fuehrung f){
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         EntityTransaction et = null;
         try{
             et = em.getTransaction(); et.begin();
@@ -86,7 +86,7 @@ public class FuehrungService {
     }
 
     public static void delete(int id){
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         EntityTransaction et = null;
         try{
             et = em.getTransaction(); et.begin();
@@ -106,7 +106,7 @@ public class FuehrungService {
     }
 
     public static List<Fuehrung> findAll(){
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         String q = "SELECT f FROM Fuehrung f";
         TypedQuery<Fuehrung> tq = em.createQuery(q, Fuehrung.class);
         try{

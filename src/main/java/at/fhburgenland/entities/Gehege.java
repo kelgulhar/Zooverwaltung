@@ -5,25 +5,28 @@ import jakarta.validation.constraints.Size;
 
 import java.util.List;
 
-@Entity
+@Entity(name = "Gehege")
+@Table(name = "gehege")
 public class Gehege {
-    public Gehege(){}
+
+    public Gehege() {
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="Gehege_ID")
+    @Column(name = "Gehege_ID")
     private int gehegeId;
 
-    @Column(name="Gehegeart",nullable = false)
+    @Column(name = "Gehegeart", nullable = false)
     private String gehegeart;
 
     // Gehege konnte gar nicht gelöscht werden
     // Deshalb veränderung der min max notation ein Gehege kann existieren ohne ein Tier zu beinhalten
     @OneToMany(mappedBy = "gehege")
-    @Size(max=10, message = "Ein Gehege beherbergt maximal 10 Tiere")
+    @Size(max = 10, message = "Ein Gehege beherbergt maximal 10 Tiere")
     private List<Tier> tiere;
 
-    @ManyToMany(mappedBy = "gereinigteGehege")
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "gereinigteGehege")
     private List<Pfleger> pflegerReinigung;
 
     // Getter und Setter
@@ -92,4 +95,12 @@ public class Gehege {
         }
     }
 
+    @Override
+    public String toString() {
+        return "Gehege{" +
+                "gehegeId=" + gehegeId +
+                ", gehegeart='" + gehegeart + '\'' +
+                ", pflegerReinigung=" + pflegerReinigung +
+                '}';
+    }
 }

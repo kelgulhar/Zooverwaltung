@@ -7,10 +7,12 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-@Entity
+@Entity(name = "Fuehrung")
+@Table(name = "fuehrung")
 public class Fuehrung {
 
-    public Fuehrung(){}
+    public Fuehrung() {
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,12 +28,12 @@ public class Fuehrung {
     @Column(name = "Uhrzeit", nullable = false)
     private LocalTime uhrzeit;
 
-    @ManyToMany(mappedBy = "fuehrungen")
-    @Size(max=1, message = "Eine Führung kann nur von einem Pfleger veranstaltet werden")
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "fuehrungen")
+    @Size(max = 1, message = "Eine Führung kann nur von einem Pfleger veranstaltet werden")
     private List<Pfleger> veranstalter;
 
     @ManyToMany(mappedBy = "besuchteFuehrungen")
-    @Size(max=20, message = "Eine FÜhrung muss von mindestens 1 und maximal 20 Besuchern besucht werden")
+    @Size(max = 20, message = "Eine FÜhrung muss von mindestens 1 und maximal 20 Besuchern besucht werden")
     private List<Besucher> besucherListe;
 
     // Getter und Setter
@@ -107,4 +109,13 @@ public class Fuehrung {
         }
     }
 
+    @Override
+    public String toString() {
+        return "Fuehrung{" +
+                "fuehrungId=" + fuehrungId +
+                ", gehegeroute='" + gehegeroute + '\'' +
+                ", datum=" + datum +
+                ", uhrzeit=" + uhrzeit +
+                '}';
+    }
 }

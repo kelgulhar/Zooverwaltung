@@ -3,28 +3,31 @@ package at.fhburgenland.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
-@Entity
+@Entity(name = "Tier")
+@Table(name = "tier")
 public class Tier {
 
-    public Tier(){ }
+    public Tier() {
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="Tier_ID", updatable = false, nullable = false)
+    @Column(name = "Tier_ID", updatable = false, nullable = false)
     private int tierId;
 
-    @Column(name="Tierart", length = 32)
+    @Column(name = "Tierart", length = 32)
     private String tierart;
 
-    @Column(name="Name", nullable = false, length = 32)
+    @Column(name = "Name", nullable = false, length = 32)
     private String name;
 
-    @Column(name="Alter")
+    @Column(name = "Alter")
     private int alter;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "Gehege_ID", nullable = false)
     private Gehege gehege;
 
@@ -32,11 +35,11 @@ public class Tier {
     private List<Gesundheitsakte> gesundheitsakten;
 
     @ManyToMany(mappedBy = "gepflegteTiere")
-    @Size(max=3, message = "Ein Tier wird von maximal 3 Pfleger gepflegt")
+    @Size(max = 3, message = "Ein Tier wird von maximal 3 Pfleger gepflegt")
     private List<Pfleger> pflegerListe;
 
     // Getter und Setter
-    public int getTierId(){
+    public int getTierId() {
         return tierId;
     }
 
@@ -115,4 +118,14 @@ public class Tier {
         }
     }
 
+    @Override
+    public String toString() {
+        return "Tier{" +
+                "tierId=" + tierId +
+                ", tierart='" + tierart + '\'' +
+                ", name='" + name + '\'' +
+                ", alter=" + alter +
+                ", gehege=" + gehege +
+                '}';
+    }
 }

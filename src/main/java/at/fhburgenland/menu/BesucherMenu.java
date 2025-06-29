@@ -1,92 +1,68 @@
-//package at.fhburgenland.menu;
-//
-//import at.fhburgenland.entities.Besucher;
-//import at.fhburgenland.services.BesucherService;
-//
-//import java.util.Scanner;
-//
-//public class BesucherMenu {
-//    private final BesucherService service;
-//    private final Scanner scanner;
-//
-//    public BesucherMenu(BesucherService service, Scanner scanner) {
-//        this.service = service;
-//        this.scanner = scanner;
-//    }
-//
-//    public void show() {
-//        boolean back = false;
-//
-//        while (!back) {
-//            System.out.println("""
-//                1 - Besucher anlegen
-//                2 - Besucher lesen
-//                3 - Besucher bearbeiten
-//                4 - Besucher löschen
-//                5 - Alle Besuchers anzeigen
-//                0 - Zurück
-//            """);
-//            String input = scanner.nextLine();
-//            switch (input) {
-//                case "1" -> create();
-//                case "2" -> read();
-//                case "3" -> update();
-//                case "4" -> delete();
-//                case "5" -> listAll();
-//                case "0" -> back = true;
-//                default -> System.out.println("Ungültige Eingabe!");
-//            }
-//        }
-//    }
-//
-//    private void create() {
-//        System.out.println("Vorname(verpflichtend):");
-//        String vorname = scanner.nextLine();
-//        System.out.println("Nachname:");
-//        String nachname = scanner.nextLine();
-//
-//        Besucher besucher = new Besucher();
-//        besucher.setVorname(vorname);
-//        besucher.setNachname(nachname);
-//
-//        service.addBesucher(besucher);
-//    }
-//
-//    private void read() {
-//        System.out.println("Besucher-ID eingeben:");
-//        int id = Integer.parseInt(scanner.nextLine());
-//        Besucher obj = service.getBesucher(id);
-//        if (obj != null) {
-//            System.out.println(obj);
-//        } else {
-//            System.out.println("Besucher nicht gefunden.");
-//        }
-//    }
-//
-//    private void update() {
-//        System.out.println("Besucher-ID eingeben:");
-//        int id = Integer.parseInt(scanner.nextLine());
-//
-//        System.out.println("Neuer Vorname:");
-//        String vorname = scanner.nextLine();
-//        System.out.println("Neuer Nachname:");
-//        String nachname = scanner.nextLine();
-//
-//        Besucher besucher = new Besucher();
-//        besucher.setBesucherId(id);
-//        besucher.setVorname(vorname);
-//        besucher.setNachname(nachname);
-//
-//        service.updateBesucher(id, besucher);
-//    }
-//
-//    private void delete() {
-//        System.out.println("ID eingeben:");
-//        int id = Integer.parseInt(scanner.nextLine());
-//        service.deleteBesucher(id);
-//    }
-//
-//    private void listAll() {
-//        service.findAll().forEach(System.out::println);
-//    }
-//}
+package at.fhburgenland.menu;
+
+import at.fhburgenland.entities.Besucher;
+import at.fhburgenland.services.BesucherService;
+import at.fhburgenland.services.FuehrungService;
+import at.fhburgenland.util.Helper;
+
+public class BesucherMenu {
+    public BesucherMenu() {
+
+    }
+
+    public void run() {
+        System.out.println("\n-- Besucher --");
+        System.out.println("1 = Create");
+        System.out.println("2 = Read");
+        System.out.println("3 = Update");
+        System.out.println("4 = Add besuchte Führung");
+        System.out.println("5 = Delete");
+        System.out.println("6 = Read besuchte Führungen");
+        System.out.println("0 = Back");
+        int choice = Helper.readInt("Auswahl:");
+        switch (choice) {
+            case 1 -> {
+                Besucher b = new Besucher();
+                b.setVorname(Helper.readStr("Vorname:"));
+                b.setNachname(Helper.readStr("Nachname:"));
+                BesucherService.create(b);
+            }
+            case 2 -> {
+                int id = Helper.readInt("Besucher-ID:");
+                System.out.println(BesucherService.find(id));
+            }
+            case 3 -> {
+                int id = Helper.readInt("Besucher-ID:");
+                Besucher b = BesucherService.find(id);
+                if (b != null) {
+                    b.setVorname(Helper.readStr("Neuer Vorname:"));
+                    b.setNachname(Helper.readStr("Neuer Nachname:"));
+                    BesucherService.update(b);
+                } else {
+                    System.err.println("Abbruch: Besucher mit dieser Id existiert nicht");
+                }
+            }
+            case 4 -> {
+                int bid = Helper.readInt("Besucher-ID:");
+                if (BesucherService.find(bid) != null) {
+                    int fid = Helper.readInt("Führung-ID:");
+                    if (FuehrungService.find(fid) != null) {
+                        BesucherService.createConnectionToFuehrung(bid, fid);
+                    } else {
+                        System.err.println("Abbruch: Führung mit dieser Id existiert nicht");
+                    }
+                } else {
+                    System.err.println("Abbruch: Besucher mit dieser Id existiert nicht");
+                }
+            }
+            case 5 -> BesucherService.delete(Helper.readInt("Besucher-ID:"));
+            case 6 -> {
+                // TODO implementieren
+            }
+            case 0 -> {
+                return;
+            }
+            default -> System.out.println("Ungültige Auswahl");
+        }
+    }
+}

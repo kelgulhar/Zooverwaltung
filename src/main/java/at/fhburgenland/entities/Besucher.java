@@ -5,29 +5,30 @@ import jakarta.validation.constraints.Size;
 
 import java.util.List;
 
-@Entity(name="Besucher")
-@Table(name="besucher")
+@Entity(name = "Besucher")
+@Table(name = "besucher")
 public class Besucher {
 
-    public Besucher(){
+    public Besucher() {
+
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="Besucher_ID", updatable = false, nullable = false)
+    @Column(name = "Besucher_ID", updatable = false, nullable = false)
     private int besucherId;
 
-    @Column(name="Vorname",nullable = false)
+    @Column(name = "Vorname", nullable = false)
     private String vorname;
 
-    @Column(name="Nachname",nullable = false)
+    @Column(name = "Nachname", nullable = false)
     private String nachname;
 
     @ManyToMany
     @JoinTable(name = "Besucht",
-        joinColumns = @JoinColumn(name = "besucher_id"),
-        inverseJoinColumns = @JoinColumn(name = "fuehrung_id"))
-    @Size(max=3, message="Ein Besucher kann maximal 3 Führungen besuchen")
+            joinColumns = @JoinColumn(name = "besucher_id"),
+            inverseJoinColumns = @JoinColumn(name = "fuehrung_id"))
+    @Size(max = 3, message = "Ein Besucher kann maximal 3 Führungen besuchen")
     private List<Fuehrung> besuchteFuehrungen;
 
     // Getter und Setter
@@ -75,11 +76,11 @@ public class Besucher {
     }
 
     @Override
-    public String toString(){
-        String entity = "Besucher {";
-        String fields = "ID: " +this.besucherId+
-                ", Vorname: " +this.vorname+
-                ", Nachname:" +this.nachname+ "}";  // oder so
-        return entity + fields;
+    public String toString() {
+        return "Besucher{" +
+                "besucherId=" + besucherId +
+                ", vorname='" + vorname + '\'' +
+                ", nachname='" + nachname + '\'' +
+                '}';
     }
 }

@@ -1,72 +1,64 @@
-//package at.fhburgenland.menu;
-//
-//import at.fhburgenland.entities.Fuetterungsplan;
-//import at.fhburgenland.services.FuetterungsplanService;
-//
-//import java.util.Scanner;
-//
-//public class FuetterungsplanMenu {
-//    private final FuetterungsplanService service;
-//    private final Scanner scanner;
-//
-//    public FuetterungsplanMenu(FuetterungsplanService service, Scanner scanner) {
-//        this.service = service;
-//        this.scanner = scanner;
-//    }
-//
-//    public void show() {
-//        boolean back = false;
-//
-//        while (!back) {
-//            System.out.println("""
-//                1 - Fuetterungsplan anlegen
-//                2 - Fuetterungsplan lesen
-//                3 - Fuetterungsplan bearbeiten
-//                4 - Fuetterungsplan löschen
-//                5 - Alle Fuetterungsplans anzeigen
-//                0 - Zurück
-//            """);
-//            String input = scanner.nextLine();
-//            switch (input) {
-//                case "1" -> create();
-//                case "2" -> read();
-//                case "3" -> update();
-//                case "4" -> delete();
-//                case "5" -> listAll();
-//                case "0" -> back = true;
-//                default -> System.out.println("Ungültige Eingabe!");
-//            }
-//        }
-//    }
-//
-//    private void create() {
-//        System.out.println("TODO: Fuetterungsplan anlegen");
-//        // Beispielhafte Eingabeaufforderung
-//    }
-//
-//    private void read() {
-//        System.out.println("ID eingeben:");
-//        int id = Integer.parseInt(scanner.nextLine());
-//        Fuetterungsplan obj = service.getFuetterungsplan(id);
-//        if (obj != null) {
-//            System.out.println(obj);
-//        } else {
-//            System.out.println("Fuetterungsplan nicht gefunden.");
-//        }
-//    }
-//
-//    private void update() {
-//        System.out.println("TODO: Fuetterungsplan bearbeiten");
-//        // Eingabe ID + neue Felder
-//    }
-//
-//    private void delete() {
-//        System.out.println("ID eingeben:");
-//        int id = Integer.parseInt(scanner.nextLine());
-//        service.deleteFuetterungsplan(id);
-//    }
-//
-//    private void listAll() {
-//        service.getAllFuetterungsplans().forEach(System.out::println);
-//    }
-//}
+package at.fhburgenland.menu;
+
+import at.fhburgenland.entities.Fuetterungsplan;
+import at.fhburgenland.services.FuetterungsplanService;
+import at.fhburgenland.services.PflegerService;
+import at.fhburgenland.util.Helper;
+
+public class FuetterungsplanMenu {
+    public FuetterungsplanMenu() {
+
+    }
+
+    public void run() {
+        System.out.println("\n-- Fütterungsplan --");
+        System.out.println("1 = Create");
+        System.out.println("2 = Read");
+        System.out.println("3 = Update");
+        System.out.println("4 = Add ausführenden Pfleger");
+        System.out.println("5 = Delete");
+        System.out.println("0 = Back");
+        int choice = Helper.readInt("Auswahl:");
+        switch (choice) {
+            case 1 -> {
+                Fuetterungsplan f = new Fuetterungsplan();
+                f.setDatum(Helper.readDate("Datum(DD.MM.YYYY):"));
+                f.setUhrzeit(Helper.readTime("Uhrzeit(HH:mm):"));
+                FuetterungsplanService.create(f);
+            }
+            case 2 -> {
+                int id = Helper.readInt("Plan-ID:");
+                System.out.println(FuetterungsplanService.find(id));
+            }
+            case 3 -> {
+                int id = Helper.readInt("Plan-ID:");
+                Fuetterungsplan f = FuetterungsplanService.find(id);
+                if (f != null) {
+                    f.setDatum(Helper.readDate("Neues Datum(DD.MM.YYYY):"));
+                    f.setUhrzeit(Helper.readTime("Neue Uhrzeit(HH:mm):"));
+                    FuetterungsplanService.update(f);
+                } else {
+                    System.err.println("Abbruch: Fütterungsplan mit dieser Id existiert nicht");
+                }
+            }
+            case 4 -> {
+                int planId = Helper.readInt("Plan-ID:");
+                if (FuetterungsplanService.find(planId) != null) {
+                    int pid = Helper.readInt("Pfleger-ID:");
+                    if (PflegerService.find(pid) != null) {
+                        FuetterungsplanService.createConnectionToPfleger(planId, pid);
+                    } else {
+                        System.err.println("Abbruch: Pfleger mit dieser Id existiert nicht");
+                    }
+                } else {
+                    System.err.println("Abbruch: Fütterungsplan mit dieser Id existiert nicht");
+                }
+            }
+            case 5 -> FuetterungsplanService.delete(Helper.readInt("Plan-ID:"));
+            case 0 -> {
+                return;
+            }
+            default -> System.out.println("Ungültige Auswahl");
+        }
+    }
+}
