@@ -31,7 +31,7 @@ public class TierMenu {
                 t.setTierart(Helper.readStr("Tierart:"));
                 t.setAlter(Helper.readInt("Alter:"));
                 int gId = Helper.readInt("Gehege-ID:");
-                if (GehegeService.find(gId) != null) {
+                if (GehegeService.find(gId) == null) {
                     System.err.println("Abbruch: Das Gehege mit dieser Id existiert nicht");
                 } else {
                     TierService.create(t, gId);
